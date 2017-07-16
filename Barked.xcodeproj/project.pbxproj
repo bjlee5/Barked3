@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E7593F7453B43EF486C085E /* Pods_Barked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C45D206CD89CDF2C5F3222E6 /* Pods_Barked.framework */; };
 		D001B4261EE860750007020D /* FriendPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D001B4251EE860750007020D /* FriendPost.swift */; };
 		D029CA801EB27D60009788CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029CA7F1EB27D60009788CE /* AppDelegate.swift */; };
 		D029CA821EB27D60009788CE /* LogInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029CA811EB27D60009788CE /* LogInVC.swift */; };
@@ -50,11 +51,12 @@
 		D0E210AD1EB40FD100067DA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E210AC1EB40FD100067DA9 /* Constants.swift */; };
 		D0E210AF1EB40FDB00067DA9 /* ShowAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E210AE1EB40FDB00067DA9 /* ShowAlerts.swift */; };
 		D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E210B01EB40FE300067DA9 /* DataService.swift */; };
-		E609FF4ABA4A1B08AFDF94FF /* Pods_Barked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233005CB191446F2D86EEE1D /* Pods_Barked.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		233005CB191446F2D86EEE1D /* Pods_Barked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Barked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DBD8CC0F8EF388A6D54CF67 /* Pods-Barked.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barked.release.xcconfig"; path = "Pods/Target Support Files/Pods-Barked/Pods-Barked.release.xcconfig"; sourceTree = "<group>"; };
+		AD58357A26B3BA85B5C540A9 /* Pods-Barked.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barked.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Barked/Pods-Barked.debug.xcconfig"; sourceTree = "<group>"; };
+		C45D206CD89CDF2C5F3222E6 /* Pods_Barked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Barked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D001B4251EE860750007020D /* FriendPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendPost.swift; sourceTree = "<group>"; };
 		D001B4271EE882BA0007020D /* Barked.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Barked.entitlements; sourceTree = "<group>"; };
 		D029CA7C1EB27D60009788CE /* Barked.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barked.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,7 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E609FF4ABA4A1B08AFDF94FF /* Pods_Barked.framework in Frameworks */,
+				8E7593F7453B43EF486C085E /* Pods_Barked.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +123,7 @@
 				D029CA7E1EB27D60009788CE /* Barked */,
 				D029CA7D1EB27D60009788CE /* Products */,
 				EED3201F414B30AB9BDCE819 /* Frameworks */,
+				DE5B3BE3A4C073B67E3D3FD1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -232,10 +235,19 @@
 			name = Services;
 			sourceTree = "<group>";
 		};
+		DE5B3BE3A4C073B67E3D3FD1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AD58357A26B3BA85B5C540A9 /* Pods-Barked.debug.xcconfig */,
+				1DBD8CC0F8EF388A6D54CF67 /* Pods-Barked.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		EED3201F414B30AB9BDCE819 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				233005CB191446F2D86EEE1D /* Pods_Barked.framework */,
+				C45D206CD89CDF2C5F3222E6 /* Pods_Barked.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -368,7 +380,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -539,6 +551,7 @@
 		};
 		D029CA921EB27D60009788CE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD58357A26B3BA85B5C540A9 /* Pods-Barked.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -556,6 +569,7 @@
 		};
 		D029CA931EB27D60009788CE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DBD8CC0F8EF388A6D54CF67 /* Pods-Barked.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
