@@ -11,8 +11,7 @@ import UIKit
 import Firebase
 
 class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-//,CommentLikesDelegate {
-
+    
     var selectedPost: Post!
     var comments = [Comment]()
     var comment: Comment!
