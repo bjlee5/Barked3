@@ -42,6 +42,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        startIndicator()
         segmentedController.selectedSegmentIndex = 0
         tableView.reloadData()
         
@@ -104,7 +105,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        indicator.startAnimating()
         segmentedController.selectedSegmentIndex = 0
         tableView.reloadData()
     }
@@ -115,32 +115,25 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         tableView.reloadData()
     }
     
-//    func stopShowingIndicator() {
-//        showSubviews()
-//        indicator.stopAnimating()
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//    }
-//
-//    func createIndicator() {
-//        indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
-//        indicator.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
-//        indicator.center = self.view.center
-//        self.view.addSubview(indicator)
-//        indicator.bringSubview(toFront: view)
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//    }
-//
-//    //Show all subviews but indicator
-//    func showSubviews() {
-//        for view in self.view.subviews {
-//            if view != indicator {
-//                view.isHidden = false
-//            }
-//        }
-//    }
-    
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    // MARK: - Activity Indicator
+    
+    func startIndicator() {
+        indicator.center = self.view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        view.addSubview(indicator)
+        
+        indicator.startAnimating()
+//        UIApplication.shared.beginIgnoringInteractionEvents()
+    }
+    
+    func stopIndicator() {
+        indicator.stopAnimating()
+//        UIApplication.shared.endIgnoringInteractionEvents()
     }
     
     // MARK: - Best in Show
@@ -153,7 +146,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
 
                 DataService.ds.REF_POSTS.child(topPost.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                     topPost.adjustBestInShow(addBest: true)
-                    print("WOOBLES - Best in show exceuted")
                     
                 })
                 
@@ -168,7 +160,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                     let otherPosts = post
                     DataService.ds.REF_POSTS.child(otherPosts.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                         otherPosts.adjustBestInShow(addBest: false)
-                        print("WOOBLES - Worst in show executed")
                     })
                 }
             
@@ -304,15 +295,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         var returnValue = 0
         switch (segmentedController.selectedSegmentIndex) {
         case 0:
-            print("DYEUCK - numbers of rows in section case 0")
             returnValue = posts.count
             break
         case 1:
-            print("DYEUCK - numbers of rows in section case 1")
             returnValue = testPosts.count
             break
         default:
-            print("DYEUCK - return 0")
             returnValue = 0
             break
         }
@@ -321,6 +309,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        stopIndicator()
         var post: Post!
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostCell {
@@ -329,15 +318,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             
             switch (segmentedController.selectedSegmentIndex) {
             case 0:
-                print("DYEUCK - tableView case 0")
                 posts.sort(by: self.sortDatesFor)
                 post = posts[indexPath.row]
             case 1:
-                print("DYEUCK - tableView case 1")
                 testPosts.sort(by: self.sortLikesFor)
                 post = testPosts[indexPath.row]
             default:
-                print("DYEUCK - tableView case default")
                 posts.sort(by: self.sortDatesFor)
                 post = posts[indexPath.row]
                 break
@@ -369,7 +355,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "FriendProfileVC" {
-            print("LEEZUS: Segway to FriendsVC performed!!")
             let destinationViewController = segue.destination as! FriendProfileVC
             destinationViewController.selectedUID = selectedUID
         } else if segue.identifier == "CommentsVC" {
@@ -412,7 +397,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func checkSelectedUID() {
-        print("LEEZUS: We're checking the selected UID")
         if selectedUID == FIRAuth.auth()?.currentUser?.uid {
             performSegue(withIdentifier: "MyProfileVC", sender: self)
         } else if selectedUID != "" {
@@ -448,14 +432,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         tableView.reloadData()
         switch(self.segmentedController.selectedSegmentIndex) {
         case 0:
-            print("DYEUCK - case 0 is selected")
             codedLabel.isHidden = true
             if posts.count <= 0 {
+                stopIndicator()
                 otherLabel.isHidden = false }
             
         case 1:
-            print("DYEUCK - case 1 is selected")
             if testPosts.count <= 0 {
+                stopIndicator()
                 codedLabel.isHidden = false }
             otherLabel.isHidden = true
         default:

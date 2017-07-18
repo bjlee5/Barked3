@@ -15,6 +15,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     var imagePicker: UIImagePickerController!
     var imageSelected = false
     var profilePicLoaded = false
+    var indicator = UIActivityIndicatorView()
     
     // Firebase References
     
@@ -35,8 +36,18 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Button Animation
+        self.chooseImage.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        self.chooseImage.setTitleColor(UIColor.white, for: .normal)
+        self.chooseImage.setBackgroundColor(color: UIColor.white, forState: .highlighted)
+        self.chooseImage.setTitleColor(UIColor.purple, for: .highlighted)
+        self.chooseImage.setBackgroundColor(color: UIColor.white, forState: .selected)
+        self.chooseImage.setTitleColor(UIColor.purple, for: .selected)
+ 
+        
         profilePic.isHidden = true
         currentUser.isHidden = true
+        chooseImage.isHidden = false
         
         loadUserInfo()
         imagePicker = UIImagePickerController()
@@ -49,10 +60,55 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if imageSelected == false {
+        chooseImage.isHidden = false
+        } else {
+            chooseImage.isHidden = true
+        }
+    }
+    
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
+    // MARK: - Activity Indicator
+    
+    func startIndicator() {
+        hideSubviews()
+        indicator.center = self.view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        view.addSubview(indicator)
+        
+        indicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
+    }
+    
+    func stopIndicator() {
+        showSubviews()
+        indicator.stopAnimating()
+        UIApplication.shared.endIgnoringInteractionEvents()
+    }
+    
+    //Hide all subviews but indicator
+    func hideSubviews() {
+        for view in self.view.subviews {
+            if view != indicator {
+                view.isHidden = true
+            }
+        }
+    }
+    
+    //Show all subviews but indicator
+    func showSubviews() {
+        for view in self.view.subviews {
+            if view != indicator {
+                view.isHidden = false
+            }
+        }
+    }
     
     // Load Current User's Profile Pic
     
@@ -100,7 +156,9 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
 
 
     @IBAction func postImage(_ sender: Any) {
-    
+        
+        startIndicator()
+        
         guard let caption = postText.text, caption != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a caption!")
             return
@@ -192,6 +250,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
         firebasePost.setValue(post)
         
+        stopIndicator()
         postText.text = ""
         imageSelected = false
         postImage.image = UIImage(named: "add-image")

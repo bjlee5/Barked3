@@ -116,6 +116,17 @@ class Post {
             _likes = _likes - 1
         }
         _postRef.child("likes").setValue(_likes)
+        print("EUREKA - Adjust likes is run! ;)")
+    }
+    
+    func postAdjustLikes(addLike: Bool) {
+        if addLike {
+            _likes = _likes + 1
+        } else {
+            _likes = _likes - 1
+        }
+        _postRef.child("likes").setValue(_likes)
+        print("EUREKA - Post Adjust likes is run! ;)")
     }
     
     func adjustBestInShow(addBest: Bool) {

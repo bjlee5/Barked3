@@ -11,7 +11,7 @@ import Firebase
 import SCLAlertView
 
 class FriendPostVC: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCommentSubclassDelegate {
-    
+
     var postArray = [Post]()
     var selectedPost: Post!
     var storageRef: FIRStorage {
@@ -30,6 +30,13 @@ class FriendPostVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         postArray.append(selectedPost)
         tableView.delegate = self
         tableView.dataSource = self
+        
+        // Observer to Update "Likes" in Realtime
+        
+        tableView.reloadData()
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.tableView.reloadData()
+        })
         
     }
     

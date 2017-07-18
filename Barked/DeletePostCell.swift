@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Foundation
 import AudioToolbox
 
 protocol MyCommentSubclassDelegate: class {
@@ -19,10 +20,8 @@ class DeletePostCell: UITableViewCell {
     var post: Post!
     var myCommentsDelegate: MyCommentSubclassDelegate?
     var likesRef: FIRDatabaseReference!
-    var storageRef: FIRStorage {
-        return FIRStorage.storage()
-    }
-
+    var storageRef: FIRStorage { return FIRStorage.storage() }
+    
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var postLikes: UILabel!
     @IBOutlet weak var postCaption: UILabel!
@@ -32,10 +31,17 @@ class DeletePostCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(likesTapped))
+        tap.numberOfTapsRequired = 1
+        likesImage.addGestureRecognizer(tap)
+        likesImage.isUserInteractionEnabled = true
+        
     }
     
     func configureCell(post: Post) {
         
+        self.post = post 
         self.likesRef = DataService.ds.REF_CURRENT_USERS.child("likes").child(post.postKey)
         self.postCaption.text = post.caption
         self.postLikes.text = "\(post.likes)"
@@ -60,6 +66,29 @@ class DeletePostCell: UITableViewCell {
             }
         })
         
+        likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let _ = snapshot.value as? NSNull {
+                self.likesImage.image = UIImage(named: "Paw")
+            } else {
+                self.likesImage.image = UIImage(named: "PawFilled")
+            }
+        })
+    }
+    
+    func likesTapped(sender: UIGestureRecognizer) {
+        likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let _ = snapshot.value as? NSNull {
+                self.likesImage.image = UIImage(named: "PawFilled")
+                self.post.adjustLikes(addLike: true)
+                self.likesRef.setValue(true)
+                self.barkSoundEffect()
+                self.playSound()
+            } else {
+                self.likesImage.image = UIImage(named: "Paw")
+                self.post.adjustLikes(addLike: false)
+                self.likesRef.removeValue()
+            }
+        })
     }
     
     // MARK: - Actions

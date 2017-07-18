@@ -997,19 +997,18 @@
                                     <constraint firstAttribute="height" constant="414" id="IQ7-Ew-9do"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsm-WL-xd1" customClass="RoundButton" customModule="Barked" customModuleProvider="target">
-                                <rect key="frame" x="157" y="252" width="100" height="30"/>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsm-WL-xd1" customClass="RoundButton" customModule="Barked" customModuleProvider="target">
+                                <rect key="frame" x="147" y="252" width="120" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="k3C-zH-PFE"/>
+                                    <constraint firstAttribute="width" constant="120" id="k3C-zH-PFE"/>
                                     <constraint firstAttribute="height" constant="30" id="pqT-MO-prq"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Select Image">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="15"/>
+                                        <real key="value" value="14"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
@@ -2124,6 +2123,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="likesImage" destination="4OJ-w9-yqh" id="yGG-hf-KdC"/>
                                             <outlet property="postCaption" destination="8F3-Nr-hZQ" id="fc8-SE-jUT"/>
                                             <outlet property="postDate" destination="FB3-oe-65U" id="0nk-fj-pOu"/>
                                             <outlet property="postImage" destination="RHU-GR-YR1" id="DMe-Bs-MIg"/>
@@ -2808,7 +2808,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="tUf-9y-esl"/>
-        <segue reference="SZL-X2-mWv"/>
         <segue reference="Ew2-Rh-cV8"/>
+        <segue reference="Ncn-0c-Sw1"/>
     </inferredMetricsTieBreakers>
 </document>
