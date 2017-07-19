@@ -10,5 +10,6 @@ pod 'Firebase/Messaging'
 pod 'FBSDKLoginKit'
 pod 'SCLAlertView-Objective-C'
 pod 'SCLAlertView'
+pod 'IQKeyboardManagerSwift'
 pod 'SwiftKeychainWrapper', :git => 'https://github.com/jrendel/SwiftKeychainWrapper.git', :branch => 'master'
 end

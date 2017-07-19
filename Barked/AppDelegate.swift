@@ -13,6 +13,7 @@ import FirebaseInstanceID
 import FirebaseMessaging
 import FBSDKLoginKit
 import UserNotifications
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate,
@@ -39,6 +40,7 @@ UNUserNotificationCenterDelegate, FIRMessagingDelegate {
             application.registerUserNotificationSettings(settings)
         }
         
+        IQKeyboardManager.sharedManager().enable = true
         FIRApp.configure()
         UIApplication.shared.unregisterForRemoteNotifications()
         registerForPushNotifications()

@@ -65,6 +65,7 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
+  - IQKeyboardManagerSwift (4.0.7)
   - SCLAlertView (0.7.0)
   - SCLAlertView-Objective-C (1.0.6)
   - SwiftKeychainWrapper (3.0.1)
@@ -76,6 +77,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Messaging
   - Firebase/Storage
+  - IQKeyboardManagerSwift
   - SCLAlertView
   - SCLAlertView-Objective-C
   - SwiftKeychainWrapper (from `https://github.com/jrendel/SwiftKeychainWrapper.git`, branch `master`)
@@ -106,10 +108,11 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
+  IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SCLAlertView-Objective-C: ca78280817e66e74366b78579350dee2ff277e23
   SwiftKeychainWrapper: e353c2d5ac22e72ff7c1dc3b1de1f0e7341ba030
 
-PODFILE CHECKSUM: 09153a407872f039a3eb8a06b190c5698d502fa2
+PODFILE CHECKSUM: c81251f6a3577a0bc2d7c023b761863f9e723df7
 
 COCOAPODS: 1.2.1
