@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Firebase
+import UserNotifications
 
 class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -19,7 +20,9 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var storageRef: FIRStorage { return FIRStorage.storage() }
     var likesRef: FIRDatabaseReference!
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+    var indicator = UIActivityIndicatorView()
     
+        
     @IBOutlet weak var addCommentField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var currentUserProPic: UIImageView!
@@ -30,6 +33,8 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("WOOBLES - \(userRef.child("username"))")
         
         tableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
         
@@ -53,6 +58,70 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         view.endEditing(true)
     }
     
+    // MARK: - Push Notifications 
+    
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+                print("WOOBLES - Schedule notification is run!!!")
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+                let content = UNMutableNotificationContent()
+                content.body = "\(notifyingUser!) commented on your photo!"
+                content.sound = UNNotificationSound.default()
+                content.badge = 1
+                
+                let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                    if let error = error {
+                        print("Error is \(error.localizedDescription)")
+                        
+                    }
+                }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    // MARK: - Activity Indicator
+    
+    func startIndicator() {
+        hideSubviews()
+        indicator.center = self.view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        view.addSubview(indicator)
+        
+        indicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
+    }
+    
+    func stopIndicator() {
+        showSubviews()
+        indicator.stopAnimating()
+        UIApplication.shared.endIgnoringInteractionEvents()
+    }
+    
+    //Hide all subviews but indicator
+    func hideSubviews() {
+        for view in self.view.subviews {
+            if view != indicator {
+                view.alpha = 0.25
+            }
+        }
+    }
+    
+    //Show all subviews but indicator
+    func showSubviews() {
+        for view in self.view.subviews {
+            if view != indicator {
+                view.alpha = 1.0 
+            }
+        }
+    }
+    
     func loadMyComment() {
         myUsername.text = selectedPost.postUser
         myComment.text = selectedPost.caption
@@ -70,7 +139,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         })
     }
     
-    func loadUserInfo(){
+    func loadUserInfo() {
         userRef.observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
@@ -186,7 +255,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     
     @IBAction func addCommentPressed(_ sender: Any) {
-        
+        if selectedPost.uid == FIRAuth.auth()?.currentUser?.uid {
+        scheduleNotifications()
+        } else {
+            print("WOOBLES - Dog, this is your post...")
+        }
         guard let caption = addCommentField.text, caption != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a caption!")
             return
@@ -198,6 +271,8 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
         if let imgData = UIImageJPEGRepresentation(proImg, 0.2) {
+            
+            startIndicator()
             
             let imgUid = NSUUID().uuidString
             let metadata = FIRStorageMetadata()
@@ -217,7 +292,6 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 
             }
         }
-        
     }
     
     // Retrieve the Current Date //
@@ -243,11 +317,18 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let firebasePost = DataService.ds.REF_POSTS.child(selectedPost.postKey).child("comments").childByAutoId()
         firebasePost.setValue(comment)
         
+        stopIndicator()
         addCommentField.text = ""
         
     }
     @IBAction func backPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension CommentsVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
     }
 }
 

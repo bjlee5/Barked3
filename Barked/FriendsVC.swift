@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import AudioToolbox
+import UserNotifications
 
 class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UserCellSubclassDelegate, UserCellProfilePressDelegate {
     
@@ -16,6 +17,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     var filteredUsers = [Friend]()
     let searchController = UISearchController(searchResultsController: nil)
     var selectedUID: String = ""
+    let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -36,6 +38,31 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         friendsTableView.tableHeaderView = searchController.searchBar
         
         friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
+    }
+    
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+            print("WOOBLES - Schedule notification is run!!!")
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "\(notifyingUser!) is now following you!"
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+            
+            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     func profileBtnTapped(cell: UserCell) {
@@ -64,7 +91,8 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     }
             
     func buttonTapped(cell: UserCell) {
-        
+        self.playSound()
+        self.soundEffect()
         var isFollower = false
         
         guard let indexPath = friendsTableView.indexPath(for: cell) else {
@@ -105,6 +133,9 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             }
             
             if isFollower == false {
+                if clickedUser == FIRAuth.auth()?.currentUser?.uid {
+                self.scheduleNotifications()
+                }
                 let following = ["following/\(key)" : clickedUser]
                 let followers = ["followers/\(key)" : uid]
                 
@@ -221,7 +252,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     var gameSound: SystemSoundID = 0
     
     func soundEffect() {
-        let path = Bundle.main.path(forResource: "Liked", ofType: "mp3")!
+        let path = Bundle.main.path(forResource: "clicky", ofType: "mp3")!
         let soundURL = URL(fileURLWithPath: path)
         AudioServicesCreateSystemSoundID(soundURL as CFURL, &gameSound)
     }
@@ -260,6 +291,10 @@ extension FriendsVC: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchText: searchController.searchBar.text!)
     }
-
 }
 
+extension FriendsVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+}

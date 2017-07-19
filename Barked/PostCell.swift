@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import Foundation
 import AudioToolbox
+import UserNotifications
 
 protocol CellSubclassDelegate: class {
     func buttonTapped(cell: PostCell)
@@ -27,6 +28,7 @@ class PostCell: UITableViewCell {
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var likesRef: FIRDatabaseReference!
     var storageRef: FIRStorage { return FIRStorage.storage() }
+    let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     
     @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var profilePic: BoarderedCircleImage!
@@ -140,6 +142,11 @@ class PostCell: UITableViewCell {
     }
 
     func likesTapped(sender: UIGestureRecognizer) {
+        if post.uid == FIRAuth.auth()?.currentUser?.uid {
+            scheduleNotifications()
+        } else {
+            print("WOOBLES - Dog, this is your post...")
+        }
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
                 self.barkSoundEffect()
@@ -155,6 +162,30 @@ class PostCell: UITableViewCell {
         })
     }
     
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+            print("WOOBLES - Schedule notification is run!!!")
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "\(notifyingUser!) liked your photo!"
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+            
+            let request = UNNotificationRequest(identifier: "likeNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
     
 
     
@@ -184,3 +215,8 @@ class PostCell: UITableViewCell {
 
 }
 
+extension PostCell: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+}

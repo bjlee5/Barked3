@@ -16,6 +16,8 @@
 		D029CA8D1EB27D60009788CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D029CA8B1EB27D60009788CE /* LaunchScreen.storyboard */; };
 		D03585361F01664B00C9C4A3 /* Assets2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D03585351F01664B00C9C4A3 /* Assets2.xcassets */; };
 		D0536CC21EF3099900DFFE94 /* BoarderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0536CC11EF3099900DFFE94 /* BoarderedView.swift */; };
+		D074DA671F1E5F1500D587BA /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA661F1E5F1400D587BA /* click.mp3 */; };
+		D074DA691F1E615600D587BA /* clicky.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA681F1E615500D587BA /* clicky.mp3 */; };
 		D075DAE21EB79E880099292E /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAE11EB79E880099292E /* PostVC.swift */; };
 		D075DAE91EB8C2800099292E /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAE81EB8C2800099292E /* CircleView.swift */; };
 		D075DAEB1EB8C2DC0099292E /* SexyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAEA1EB8C2DC0099292E /* SexyButton.swift */; };
@@ -68,6 +70,8 @@
 		D029CA8E1EB27D60009788CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D03585351F01664B00C9C4A3 /* Assets2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets2.xcassets; path = ../Assets2.xcassets; sourceTree = "<group>"; };
 		D0536CC11EF3099900DFFE94 /* BoarderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoarderedView.swift; sourceTree = "<group>"; };
+		D074DA661F1E5F1400D587BA /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = click.mp3; path = ../../click.mp3; sourceTree = "<group>"; };
+		D074DA681F1E615500D587BA /* clicky.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = clicky.mp3; path = ../../clicky.mp3; sourceTree = "<group>"; };
 		D075DAE11EB79E880099292E /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		D075DAE81EB8C2800099292E /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D075DAEA1EB8C2DC0099292E /* SexyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexyButton.swift; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 				D075DAFC1EBA83730099292E /* ErrorBark.wav */,
 				D075DB061EBA992B0099292E /* Post.mp3 */,
 				D075DB041EBA99280099292E /* Woof.mp3 */,
+				D074DA661F1E5F1400D587BA /* click.mp3 */,
+				D074DA681F1E615500D587BA /* clicky.mp3 */,
 				D075DB081EBB47C30099292E /* Liked.mp3 */,
 				D075DB021EBA957E0099292E /* DogShakingHead.wav */,
 				D029CA831EB27D60009788CE /* Main.storyboard */,
@@ -291,7 +297,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 0;
@@ -324,11 +330,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D075DB091EBB47C30099292E /* Liked.mp3 in Resources */,
+				D074DA671F1E5F1500D587BA /* click.mp3 in Resources */,
 				D075DB071EBA992B0099292E /* Post.mp3 in Resources */,
 				D03585361F01664B00C9C4A3 /* Assets2.xcassets in Resources */,
 				D075DAF11EB8C38A0099292E /* GoogleService-Info.plist in Resources */,
 				D029CA8D1EB27D60009788CE /* LaunchScreen.storyboard in Resources */,
 				D075DB031EBA957F0099292E /* DogShakingHead.wav in Resources */,
+				D074DA691F1E615600D587BA /* clicky.mp3 in Resources */,
 				D075DAFD1EBA83730099292E /* ErrorBark.wav in Resources */,
 				D075DB051EBA99280099292E /* Woof.mp3 in Resources */,
 				D029CA851EB27D60009788CE /* Main.storyboard in Resources */,
@@ -554,6 +562,7 @@
 			baseConfigurationReference = AD58357A26B3BA85B5C540A9 /* Pods-Barked.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6225SLKFTH;
@@ -572,6 +581,7 @@
 			baseConfigurationReference = 1DBD8CC0F8EF388A6D54CF67 /* Pods-Barked.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6225SLKFTH;

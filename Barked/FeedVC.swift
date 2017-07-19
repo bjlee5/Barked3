@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 import Foundation
+import UserNotifications
 
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CellSubclassDelegate, CommentsSubclassDelegate {
     
@@ -146,7 +147,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
 
                 DataService.ds.REF_POSTS.child(topPost.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                     topPost.adjustBestInShow(addBest: true)
-                    
                 })
                 
             }
@@ -404,6 +404,30 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         }
     }
     
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "You're currently today's best in show!"
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+            
+            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
     // MARK: - Actions
 
     @IBAction func profileBtn(_ sender: Any) {
@@ -446,5 +470,11 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             codedLabel.isHidden = true
             otherLabel.isHidden = true
         }
+    }
+}
+
+extension FeedVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
     }
 }

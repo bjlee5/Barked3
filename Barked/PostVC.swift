@@ -157,8 +157,6 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
 
     @IBAction func postImage(_ sender: Any) {
         
-        startIndicator()
-        
         guard let caption = postText.text, caption != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a caption!")
             return
@@ -175,6 +173,8 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         }
         
         if let imgData = UIImageJPEGRepresentation(img, 0.2) {
+            
+            startIndicator()
             
             let imgUid = NSUUID().uuidString
             let metadata = FIRStorageMetadata()
