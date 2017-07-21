@@ -94,12 +94,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         tableView.dataSource = self
         tableView.contentInset = UIEdgeInsets.zero
         
-        
-        // Dismiss Keyboard //
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-
     }
     
         // End ViewDidLoad
@@ -115,11 +109,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         segmentedController.selectedSegmentIndex = 0
         tableView.reloadData()
     }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
+        
     // MARK: - Activity Indicator
     
     func startIndicator() {
@@ -353,15 +343,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     // MARK: - Helper Methods
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "FriendProfileVC" {
-            let destinationViewController = segue.destination as! FriendProfileVC
-            destinationViewController.selectedUID = selectedUID
-        } else if segue.identifier == "CommentsVC" {
-            let destinationViewController = segue.destination as! CommentsVC
-            destinationViewController.selectedPost = selectedPost
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "FriendProfileVC" {
+//            let destinationViewController = segue.destination as! FriendProfileVC
+//            destinationViewController.selectedUID = selectedUID
+//        } else if segue.identifier == "CommentsVC" {
+//            let destinationViewController = segue.destination as! CommentsVC
+//            destinationViewController.selectedPost = selectedPost
+//        }
+//    }
         
     func buttonTapped(cell: PostCell) {
         var clickedUser = ""
@@ -393,14 +383,25 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func checkSelectedPost() {
-        performSegue(withIdentifier: "CommentsVC", sender: self)
+//        performSegue(withIdentifier: "CommentsVC", sender: self)
+        print("BRIAN - Comments VC push")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "CommentsVC") as! CommentsVC
+        vc.selectedPost = selectedPost
+        self.present(vc, animated: true, completion: nil)
     }
     
     func checkSelectedUID() {
         if selectedUID == FIRAuth.auth()?.currentUser?.uid {
-            performSegue(withIdentifier: "MyProfileVC", sender: self)
+//            performSegue(withIdentifier: "MyProfileVC", sender: self)
+            print("BRIAN - Selected UID is your own")
+            let profileVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
+            self.present(profileVC, animated: true, completion: nil)
         } else if selectedUID != "" {
-            performSegue(withIdentifier: "FriendProfileVC", sender: self)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "FriendProfileVC") as! FriendProfileVC
+            vc.selectedUID = selectedUID
+            self.present(vc, animated: true, completion: nil)
         }
     }
     
@@ -431,7 +432,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     // MARK: - Actions
 
     @IBAction func profileBtn(_ sender: Any) {
-        performSegue(withIdentifier: "MyProfileVC", sender: self)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
+        self.present(vc, animated: true, completion: nil)
     }
 
     // Logging Out //

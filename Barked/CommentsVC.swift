@@ -21,8 +21,9 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var likesRef: FIRDatabaseReference!
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var indicator = UIActivityIndicatorView()
+    var isExpandable = false
+    var selectedIndex: IndexPath?
     
-        
     @IBOutlet weak var addCommentField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var currentUserProPic: UIImageView!
@@ -31,9 +32,14 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var myUsername: UILabel!
     @IBOutlet weak var myComment: UILabel!
     
+    // MARK: - ViewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let nib = UINib.init(nibName: "CommentsCell", bundle: nil)
+//        self.tableView.register(nib, forCellReuseIdentifier: "CommentsCell")
+//
         print("WOOBLES - \(userRef.child("username"))")
         
         tableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
@@ -47,15 +53,6 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         loadMyComment()
         loadUserInfo()
         fetchComments()
-        
-        // Dismiss Keyboard //
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
-    }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
     }
     
     // MARK: - Push Notifications 
@@ -197,6 +194,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.reloadData()
     }
     
+    func didExpandCell() {
+        self.isExpandable != isExpandable
+        self.tableView.reloadRows(at: [selectedIndex!], with: .automatic)
+    }
+    
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -204,12 +206,13 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentsCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CommentsCell", for: indexPath) as! CommentsCell
         
         let comment = comments[indexPath.row]
 //        cell.commentDelegate = self
         cell.configureCommentLikes(comment: comment, selectedPostKey: selectedPost.postKey, currentCommentKey: comment.commentKey)
         cell.usernameField.text = comments[indexPath.row].postUser
+        cell.usernameField.numberOfLines = 0
         cell.commentField.text = comments[indexPath.row].caption
         cell.commentDate.text = comments[indexPath.row].currentDate
         cell.setNeedsUpdateConstraints()
@@ -251,6 +254,18 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCellEditingStyle.none
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectedIndex = indexPath
+        self.didExpandCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if isExpandable && self.selectedIndex == indexPath {
+            return 200
+        }
+        return 100
     }
 
     

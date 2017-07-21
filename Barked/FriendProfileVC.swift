@@ -69,7 +69,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         layout.minimumLineSpacing = 0
         collectionView!.collectionViewLayout = layout
         
-        
     }
     
     // Load Current User Info
@@ -234,7 +233,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     @IBAction func backPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-    
 }
 
 

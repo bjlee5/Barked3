@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import Foundation
 import AudioToolbox
+import UserNotifications
 
 protocol MyCommentSubclassDelegate: class {
     func commentButtonTapped(cell: DeletePostCell)
@@ -21,6 +22,7 @@ class DeletePostCell: UITableViewCell {
     var myCommentsDelegate: MyCommentSubclassDelegate?
     var likesRef: FIRDatabaseReference!
     var storageRef: FIRStorage { return FIRStorage.storage() }
+    let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var postLikes: UILabel!
@@ -75,7 +77,39 @@ class DeletePostCell: UITableViewCell {
         })
     }
     
+    // MARK: - Push Notifications
+    
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+            print("WOOBLES - Schedule notification is run!!!")
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "\(notifyingUser!) commented on your photo!"
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+            
+            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
     func likesTapped(sender: UIGestureRecognizer) {
+        if post.uid == FIRAuth.auth()?.currentUser?.uid {
+            scheduleNotifications()
+        } else {
+            print("WOOBLES - Dog, this is your post...")
+        }
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
                 self.likesImage.image = UIImage(named: "PawFilled")
@@ -111,3 +145,10 @@ class DeletePostCell: UITableViewCell {
         AudioServicesPlaySystemSound(gameSound)
     }
 }
+
+extension FriendProfileVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+}
+

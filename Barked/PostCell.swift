@@ -170,9 +170,11 @@ class PostCell: UITableViewCell {
             print("WOOBLES - Schedule notification is run!!!")
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
+            var badge = 0
+            badge += 1
             content.body = "\(notifyingUser!) liked your photo!"
             content.sound = UNNotificationSound.default()
-            content.badge = 1
+            content.badge = badge as NSNumber
             
             let request = UNNotificationRequest(identifier: "likeNotification", content: content, trigger: trigger)
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -197,7 +199,6 @@ class PostCell: UITableViewCell {
     @IBAction func commentPressed(_ sender: Any) {
         self.commentsDelegate?.commentButtonTapped(cell: self)
     }
-    
     
     // Play Sounds
     

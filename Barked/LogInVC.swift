@@ -38,10 +38,6 @@ class LogInVC: UIViewController {
         shakeHeadSound()
         playSound()
         
-        // Dismiss Keyboard //
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -54,10 +50,6 @@ class LogInVC: UIViewController {
             let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Tab")
             self.present(vc, animated: true, completion: nil)
         }
-    }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
     }
     
     func showCurrentUser() {
@@ -103,6 +95,7 @@ class LogInVC: UIViewController {
                 
                 showWarningMessage("Error", subTitle: "The password or E-mail you have entered do not match our records!")
             }
+            
             if let user = user {
                 let userData = ["email": self.loginField.text!, "password": self.passwordField.text!]
                 self.completeSignIn(id: user.uid, userData: userData)

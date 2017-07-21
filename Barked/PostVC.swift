@@ -54,10 +54,6 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        // Dismiss Keyboard //
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -67,10 +63,6 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         } else {
             chooseImage.isHidden = true
         }
-    }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
     }
     
     // MARK: - Activity Indicator
@@ -96,7 +88,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     func hideSubviews() {
         for view in self.view.subviews {
             if view != indicator {
-                view.isHidden = true
+                view.alpha = 0.25
             }
         }
     }
@@ -105,7 +97,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     func showSubviews() {
         for view in self.view.subviews {
             if view != indicator {
-                view.isHidden = false
+                view.alpha = 1.0
             }
         }
     }
