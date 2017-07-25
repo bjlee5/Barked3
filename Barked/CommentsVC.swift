@@ -270,7 +270,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     
     @IBAction func addCommentPressed(_ sender: Any) {
-        if selectedPost.uid == FIRAuth.auth()?.currentUser?.uid {
+        if selectedPost.uid != FIRAuth.auth()?.currentUser?.uid {
         scheduleNotifications()
         } else {
             print("WOOBLES - Dog, this is your post...")

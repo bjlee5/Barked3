@@ -45,12 +45,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         
         startIndicator()
         segmentedController.selectedSegmentIndex = 0
+        self.posts.sort(by: self.sortDatesFor)
         tableView.reloadData()
         
         // Observer to Update "Likes" in Realtime
         
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.tableView.reloadData()
+            self.posts.sort(by: self.sortDatesFor)
         })
         
         // Coded Label
@@ -101,12 +103,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         segmentedController.selectedSegmentIndex = 0
+        self.posts.sort(by: self.sortDatesFor)
         tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         segmentedController.selectedSegmentIndex = 0
+        self.posts.sort(by: self.sortDatesFor)
         tableView.reloadData()
     }
         
@@ -228,7 +232,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             self.tableView.reloadData()
         })
     }
-    
+    /// Fetches posts for feed
     func fetchPosts() {
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.posts = []
@@ -254,7 +258,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         }
     })
 }
-    
+    /// Fetches posts for "Daily Best" - aka only posts for current date
     func test() {
         let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.none)
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
@@ -314,8 +318,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                 testPosts.sort(by: self.sortLikesFor)
                 post = testPosts[indexPath.row]
             default:
-                posts.sort(by: self.sortDatesFor)
-                post = posts[indexPath.row]
                 break
             }
             

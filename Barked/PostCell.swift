@@ -142,7 +142,7 @@ class PostCell: UITableViewCell {
     }
 
     func likesTapped(sender: UIGestureRecognizer) {
-        if post.uid == FIRAuth.auth()?.currentUser?.uid {
+        if post.uid != FIRAuth.auth()?.currentUser?.uid {
             scheduleNotifications()
         } else {
             print("WOOBLES - Dog, this is your post...")

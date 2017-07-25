@@ -133,7 +133,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             }
             
             if isFollower == false {
-                if clickedUser == FIRAuth.auth()?.currentUser?.uid {
+                if clickedUser != FIRAuth.auth()?.currentUser?.uid {
                 self.scheduleNotifications()
                 }
                 let following = ["following/\(key)" : clickedUser]
@@ -168,6 +168,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         friendsTableView.reloadData()
     }
     
+    /// Pulls down users from Firebase and assigsn them to [Friend]
     func retrieveUser() {
         let ref = FIRDatabase.database().reference()
         ref.child("users").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
@@ -201,7 +202,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     
     // MARK: - Table view data source
     
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != "" {
             return filteredUsers.count

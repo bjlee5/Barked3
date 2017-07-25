@@ -16,6 +16,8 @@
 		D029CA8D1EB27D60009788CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D029CA8B1EB27D60009788CE /* LaunchScreen.storyboard */; };
 		D03585361F01664B00C9C4A3 /* Assets2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D03585351F01664B00C9C4A3 /* Assets2.xcassets */; };
 		D0536CC21EF3099900DFFE94 /* BoarderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0536CC11EF3099900DFFE94 /* BoarderedView.swift */; };
+		D0746FDD1F26AE4C00AAD6D7 /* FriendFollowingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0746FDC1F26AE4C00AAD6D7 /* FriendFollowingVC.swift */; };
+		D0746FDF1F26AF1B00AAD6D7 /* FriendFollowersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */; };
 		D074DA671F1E5F1500D587BA /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA661F1E5F1400D587BA /* click.mp3 */; };
 		D074DA691F1E615600D587BA /* clicky.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA681F1E615500D587BA /* clicky.mp3 */; };
 		D075DAE21EB79E880099292E /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAE11EB79E880099292E /* PostVC.swift */; };
@@ -34,6 +36,8 @@
 		D075DB111EBCC3F50099292E /* FriendProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DB101EBCC3F50099292E /* FriendProfileVC.swift */; };
 		D075DB361EC0A6080099292E /* BoarderedImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DB351EC0A6080099292E /* BoarderedImages.swift */; };
 		D0790AB31ED8CB9100684667 /* Breeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0790AB21ED8CB9100684667 /* Breeds.swift */; };
+		D07CB60C1F22612F00034CB8 /* MyFollowingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CB60B1F22612E00034CB8 /* MyFollowingVC.swift */; };
+		D07CB60E1F22615600034CB8 /* MyFollowersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CB60D1F22615600034CB8 /* MyFollowersVC.swift */; };
 		D0BEC92A1EE71805000181DA /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC9291EE71805000181DA /* Comment.swift */; };
 		D0BEC92C1EE71854000181DA /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC92B1EE71854000181DA /* CommentsCell.swift */; };
 		D0BEC92E1EE71874000181DA /* CommentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC92D1EE71874000181DA /* CommentsVC.swift */; };
@@ -70,6 +74,8 @@
 		D029CA8E1EB27D60009788CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D03585351F01664B00C9C4A3 /* Assets2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets2.xcassets; path = ../Assets2.xcassets; sourceTree = "<group>"; };
 		D0536CC11EF3099900DFFE94 /* BoarderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoarderedView.swift; sourceTree = "<group>"; };
+		D0746FDC1F26AE4C00AAD6D7 /* FriendFollowingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendFollowingVC.swift; sourceTree = "<group>"; };
+		D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendFollowersVC.swift; sourceTree = "<group>"; };
 		D074DA661F1E5F1400D587BA /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = click.mp3; path = ../../click.mp3; sourceTree = "<group>"; };
 		D074DA681F1E615500D587BA /* clicky.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = clicky.mp3; path = ../../clicky.mp3; sourceTree = "<group>"; };
 		D075DAE11EB79E880099292E /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
@@ -88,6 +94,8 @@
 		D075DB101EBCC3F50099292E /* FriendProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendProfileVC.swift; sourceTree = "<group>"; };
 		D075DB351EC0A6080099292E /* BoarderedImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoarderedImages.swift; sourceTree = "<group>"; };
 		D0790AB21ED8CB9100684667 /* Breeds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Breeds.swift; sourceTree = "<group>"; };
+		D07CB60B1F22612E00034CB8 /* MyFollowingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowingVC.swift; sourceTree = "<group>"; };
+		D07CB60D1F22615600034CB8 /* MyFollowersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowersVC.swift; sourceTree = "<group>"; };
 		D0BEC9291EE71805000181DA /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		D0BEC92B1EE71854000181DA /* CommentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
 		D0BEC92D1EE71874000181DA /* CommentsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsVC.swift; sourceTree = "<group>"; };
@@ -220,6 +228,10 @@
 				D001B4251EE860750007020D /* FriendPost.swift */,
 				D0E210941EB40E6300067DA9 /* EditProfileVC.swift */,
 				D0E210981EB40EA000067DA9 /* ForgotPasswordVC.swift */,
+				D07CB60B1F22612E00034CB8 /* MyFollowingVC.swift */,
+				D07CB60D1F22615600034CB8 /* MyFollowersVC.swift */,
+				D0746FDC1F26AE4C00AAD6D7 /* FriendFollowingVC.swift */,
+				D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -402,6 +414,7 @@
 				D0E210931EB40E5000067DA9 /* MyProfileVC.swift in Sources */,
 				D0E210A31EB40F5C00067DA9 /* UserCell.swift in Sources */,
 				D0E2108F1EB40E3200067DA9 /* NewUserVC.swift in Sources */,
+				D0746FDF1F26AF1B00AAD6D7 /* FriendFollowersVC.swift in Sources */,
 				D0E210AB1EB40FBF00067DA9 /* Post.swift in Sources */,
 				D0E2108D1EB40E2500067DA9 /* FeedVC.swift in Sources */,
 				D075DB111EBCC3F50099292E /* FriendProfileVC.swift in Sources */,
@@ -412,6 +425,7 @@
 				D0790AB31ED8CB9100684667 /* Breeds.swift in Sources */,
 				D029CA881EB27D60009788CE /* Barked.xcdatamodeld in Sources */,
 				D075DB0B1EBB5FFB0099292E /* DeletePostVC.swift in Sources */,
+				D07CB60E1F22615600034CB8 /* MyFollowersVC.swift in Sources */,
 				D0E210991EB40EA000067DA9 /* ForgotPasswordVC.swift in Sources */,
 				D0BEC92E1EE71874000181DA /* CommentsVC.swift in Sources */,
 				D075DAE91EB8C2800099292E /* CircleView.swift in Sources */,
@@ -422,6 +436,7 @@
 				D0E2109F1EB40F1B00067DA9 /* PostCell.swift in Sources */,
 				D0BEC92C1EE71854000181DA /* CommentsCell.swift in Sources */,
 				D0E210971EB40E6F00067DA9 /* FriendsVC.swift in Sources */,
+				D0746FDD1F26AE4C00AAD6D7 /* FriendFollowingVC.swift in Sources */,
 				D029CA801EB27D60009788CE /* AppDelegate.swift in Sources */,
 				D0E210AF1EB40FDB00067DA9 /* ShowAlerts.swift in Sources */,
 				D0E210A51EB40F7000067DA9 /* SexyView.swift in Sources */,
@@ -431,6 +446,7 @@
 				D075DAE21EB79E880099292E /* PostVC.swift in Sources */,
 				D0E210AD1EB40FD100067DA9 /* Constants.swift in Sources */,
 				D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */,
+				D07CB60C1F22612F00034CB8 /* MyFollowingVC.swift in Sources */,
 				D075DAED1EB8C2F40099292E /* SexyField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

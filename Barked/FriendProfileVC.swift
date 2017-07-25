@@ -233,6 +233,20 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     @IBAction func backPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func followersBtn(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "FriendFollowersVC") as! FriendFollowersVC
+        vc.selectedUID = selectedUID
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func followingBtn(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "FriendFollowingVC") as! FriendFollowingVC
+        vc.selectedUID = selectedUID
+        self.present(vc, animated: true, completion: nil)
+    }
 }
 
 

@@ -35,8 +35,6 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
     
-
-
     @IBOutlet weak var proPic: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -83,6 +81,11 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         collectionView!.collectionViewLayout = layout
         
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        showStats()
     }
     
     // Load Current User Info
@@ -188,7 +191,11 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                 }
             }
         })
+        
+        ref.removeAllObservers()
+        
     }
+    
     @IBAction func backPress(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -246,17 +253,25 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     // MARK: - Actions
     
-
     @IBAction func backPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-
-
     @IBAction func editProfile(_ sender: Any) {
     let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditProfileVC")
         self.present(vc, animated: true, completion: nil)
     }
 
+    
+    @IBAction func followingBtn(_ sender: Any) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyFollowingVC")
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func followersBtn(_ sender: Any) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyFollowersVC")
+        self.present(vc, animated: true, completion: nil)
+    }
+    
 }
 

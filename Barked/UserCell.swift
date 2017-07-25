@@ -88,11 +88,11 @@ class UserCell: UITableViewCell {
                         }
                     }
                 })
-                
+        
                 ref.removeAllObservers()
         
             }
-
+    
     
     @IBAction func followPressed(_ sender: Any) {
         self.userDelegate?.buttonTapped(cell: self)
