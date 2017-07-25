@@ -2863,7 +2863,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T9q-XY-c35" id="MtH-oy-Uup">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rVq-gq-6n8" customClass="CircleView" customModule="Barked" customModuleProvider="target">
@@ -2919,7 +2919,6 @@
                                                 <constraint firstItem="dz8-WN-lMg" firstAttribute="leading" secondItem="rVq-gq-6n8" secondAttribute="trailing" constant="15" id="x8G-Gl-eMb"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="followButton" destination="1Ik-z7-D2j" id="TdR-CU-8sA"/>
                                             <outlet property="userImage" destination="rVq-gq-6n8" id="cZ8-rA-34w"/>
@@ -3040,7 +3039,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hRl-iN-mVh" id="Pp9-HL-JEa">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NUz-mp-K1o" customClass="CircleView" customModule="Barked" customModuleProvider="target">
@@ -3096,7 +3095,7 @@
                                                 <constraint firstItem="oQo-Mf-QF1" firstAttribute="bottom" secondItem="Pp9-HL-JEa" secondAttribute="bottomMargin" id="sXd-2G-Qcu"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.73725490199999999" green="0.54901960780000003" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="followButton" destination="5GP-f5-cnV" id="DI4-W0-It4"/>
                                             <outlet property="userImage" destination="NUz-mp-K1o" id="FeK-J9-O6V"/>
@@ -3217,7 +3216,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7BZ-8D-TDC" id="qJI-uB-Jpo">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0j6-fS-ezZ" customClass="CircleView" customModule="Barked" customModuleProvider="target">
@@ -3273,7 +3272,7 @@
                                                 <constraint firstItem="0j6-fS-ezZ" firstAttribute="top" secondItem="qJI-uB-Jpo" secondAttribute="topMargin" constant="16" id="wuP-b3-ufc"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.73725490199999999" green="0.54901960780000003" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="followButton" destination="nEe-KR-MaJ" id="u36-L5-Ijo"/>
                                             <outlet property="userImage" destination="0j6-fS-ezZ" id="saa-Vo-bSf"/>
@@ -3394,7 +3393,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rCV-FM-E7Y" id="nQD-54-VLX">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cwf-gI-Odo" customClass="CircleView" customModule="Barked" customModuleProvider="target">
@@ -3450,7 +3449,7 @@
                                                 <constraint firstItem="A5E-Cl-uJx" firstAttribute="leading" secondItem="cwf-gI-Odo" secondAttribute="trailing" constant="5" id="xBj-LJ-o2n"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.73725490199999999" green="0.54901960780000003" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="followButton" destination="IjP-lQ-vJg" id="eUc-Z6-aE4"/>
                                             <outlet property="userImage" destination="cwf-gI-Odo" id="ku3-cc-2wg"/>

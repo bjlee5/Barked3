@@ -34,7 +34,7 @@ class FriendFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataS
         uidToFriend()
         tableView.dataSource = self
         tableView.delegate = self
-        
+        tableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
     }
     
     // MARK: - Helper Functions
@@ -157,6 +157,7 @@ class FriendFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataS
             cell.userName.text = friend.username
             cell.userID = friend.userID
             cell.userImage.downloadImage(from: friend.imagePath!)
+            cell.backgroundColor = UIColor.clear
             cell.checkFollowing(indexPath: friend.userID)
             return cell
         } else {

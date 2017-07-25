@@ -37,6 +37,8 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         definesPresentationContext = true
         friendsTableView.tableHeaderView = searchController.searchBar
         
+        
+        //Styling for background view
         friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
     }
     
