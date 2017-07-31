@@ -18,6 +18,8 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     var selectedUID: String = ""
     var selectedPost: Post!
     var posts = [Post]()
+//    var bestInShowArray = [Post]()
+//    var bestInShowTotal = 0
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var profilePicLoaded = false
     var storageRef: FIRStorage { return FIRStorage.storage() }
@@ -42,9 +44,13 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     @IBOutlet weak var followingAmount: UILabel!
     @IBOutlet weak var bestInShowImage: UIImageView!
     @IBOutlet weak var breed: UILabel!
+    @IBOutlet weak var followButton: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Observer to Update in Realtime
+
         
         print("LEEZUS: This is your man - \(selectedUID)")
         
@@ -70,6 +76,21 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         collectionView!.collectionViewLayout = layout
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        showStats()
+    }
+    
+//    func bestInShowStats() -> Int {
+//        for post in posts {
+//
+//            if post.bestInShow == true && 3 >= bestInShowTotal {
+//                bestInShowTotal += 1
+//            }
+//        }
+//                return bestInShowTotal / 2
+//    }
     
     // Load Current User Info
     
@@ -108,6 +129,8 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+            checkFollowing(indexPath: selectedUID)
     }
     
     /// Sort Feed of Posts by Current Date
@@ -166,6 +189,8 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
             }
         })
         
+        ref.removeAllObservers()
+        
         ref.child("users").child(selectedUID).child("followers").queryOrderedByKey().observe(.value, with: { (snapshots) in
             if let followers = snapshots.value as? [String: AnyObject] {
                 for (_, values) in followers {
@@ -177,6 +202,26 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
                 }
             }
         })
+        
+        ref.removeAllObservers()
+    }
+    
+    func checkFollowing(indexPath: String) {
+        
+        let uid = FIRAuth.auth()!.currentUser!.uid
+        let ref = FIRDatabase.database().reference()
+        
+        ref.child("users").child(uid).child("following").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+            if let following = snapshot.value as? [String: AnyObject] {
+                for (_, value) in following {
+                    if value as! String == indexPath {
+                        self.followButton.image = UIImage(named: "followed")
+                    }
+                }
+            }
+        })
+        
+        ref.removeAllObservers()
     }
 
     // Collection View
@@ -247,6 +292,53 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         vc.selectedUID = selectedUID
         self.present(vc, animated: true, completion: nil)
     }
+    
+    // MARK: Actions 
+    
+    @IBAction func followBtnPress(_ sender: Any) {
+        
+        var isFollower = false
+        let uid = FIRAuth.auth()!.currentUser!.uid
+        let ref = FIRDatabase.database().reference()
+        let key = ref.child("users").childByAutoId().key
+        let clickedUser = selectedUID
+        
+        ref.child("users").child(uid).child("following").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+            if let following = snapshot.value as? [String: AnyObject] {
+                for (ke, value) in following {
+                    
+                    if value as? String == clickedUser {
+                        isFollower = true
+                        
+                        ref.child("users").child(uid).child("following/\(ke)").removeValue()
+                        ref.child("users").child(clickedUser).child("followers/\(ke)").removeValue()
+                        print("LEEZUS: This is you \(clickedUser)")
+                        
+                        self.followButton.image = UIImage(named: "follow")
+                        self.showStats()
+                    }
+                }
+            }
+            
+            if isFollower == false {
+
+                let following = ["following/\(key)" : clickedUser]
+                let followers = ["followers/\(key)" : uid]
+                
+                ref.child("users").child(uid).updateChildValues(following)
+                ref.child("users").child(clickedUser).updateChildValues(followers)
+                
+                self.followButton.image = UIImage(named: "followed")
+                self.showStats()
+            }
+            
+        })
+        
+        ref.removeAllObservers()
+        
+    }
+    
+    
 }
 
 

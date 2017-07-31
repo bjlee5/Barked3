@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import SCLAlertView
+//import DropDown
 
 class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -18,6 +19,7 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         return FIRStorage.storage()
     }
     var breeds = [String]()
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -252,6 +254,32 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         
         dismiss(animated: true, completion: nil)
         
+    }
+    
+    func delete() {
+        let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+        userRef.observe(.value, with: { (snapshot) in
+            
+            
+            FIRAuth.auth()?.currentUser?.delete(completion: { (error) in
+                
+                if error == nil {
+                    
+                    print("BRIAN: Account successfully deleted!")
+                    DispatchQueue.main.async {
+                        
+                        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInVC")
+                        self.present(vc, animated: true, completion: nil)
+                        
+                        
+                    }
+                    
+                } else {
+                    
+                    print(error?.localizedDescription)
+                }
+            })
+        })
         
     }
     
@@ -281,34 +309,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             
         }
         alertView.showError("WARNING", subTitle: "Are you sure you want to delete your account?")
-        
-        
-    }
-    
-    func delete() {
-        let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
-        userRef.observe(.value, with: { (snapshot) in
-            
-            
-            FIRAuth.auth()?.currentUser?.delete(completion: { (error) in
-                
-                if error == nil {
-                    
-                    print("BRIAN: Account successfully deleted!")
-                    DispatchQueue.main.async {
-                        
-                        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInVC")
-                        self.present(vc, animated: true, completion: nil)
-                        
-                        
-                    }
-                    
-                } else {
-                    
-                    print(error?.localizedDescription)
-                }
-            })
-        })
         
     }
     

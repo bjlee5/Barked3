@@ -72,6 +72,7 @@ class FriendPostVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 print("error \(error)")
             }
         }
+        
         // Remove the image from storage
         let imageRef = storage.child("posts").child(uid).child("\(selectedPost.postKey).jpg")
         imageRef.delete { error in
@@ -86,6 +87,7 @@ class FriendPostVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.deleteRows(at: [forRowAt], with: .automatic)
         
     }
+
     
     // MARK: - Helper Methods
     

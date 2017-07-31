@@ -5,6 +5,7 @@ PODS:
   - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
   - Bolts/Tasks (1.8.4)
+  - DropDown (2)
   - FBSDKCoreKit (4.17.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.17.0):
@@ -71,6 +72,7 @@ PODS:
   - SwiftKeychainWrapper (3.0.1)
 
 DEPENDENCIES:
+  - DropDown
   - FBSDKLoginKit
   - Firebase/Auth
   - Firebase/Core
@@ -94,6 +96,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  DropDown: 744784d9c9aa505100e942c16acd05430cbb2f0a
   FBSDKCoreKit: 30a21d2d7b92984b3d80497113433c00824c35e9
   FBSDKLoginKit: 42b7129ac0373ca99eaf4cbebf4d07bd42371f59
   Firebase: ff77ffb77b317c3720fef57a60e9335cebf962e6
@@ -113,6 +116,6 @@ SPEC CHECKSUMS:
   SCLAlertView-Objective-C: ca78280817e66e74366b78579350dee2ff277e23
   SwiftKeychainWrapper: e353c2d5ac22e72ff7c1dc3b1de1f0e7341ba030
 
-PODFILE CHECKSUM: c81251f6a3577a0bc2d7c023b761863f9e723df7
+PODFILE CHECKSUM: 9defe008d4098787d207f804a9b305c3f949f09a
 
 COCOAPODS: 1.2.1

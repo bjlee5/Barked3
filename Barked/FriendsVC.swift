@@ -28,6 +28,12 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Observer to Update TableView in Realtime
+        
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.friendsTableView.reloadData()
+        })
+        
         friendsTableView.dataSource = self
         friendsTableView.delegate = self
         retrieveUser()
@@ -40,6 +46,20 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         
         //Styling for background view
         friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.friendsTableView.reloadData()
+        })
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.friendsTableView.reloadData()
+        })
     }
     
     func scheduleNotifications() {

@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DropDown.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>FBSDKCoreKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,12 +62,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>101752124AC6D91792C3F7730DB20075</key>
+		<key>0245B8060761E02D2F1552AACF3FE476</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>143B91BA939B1EAD96ED224355DDA4A5</key>
+		<key>36844FF2207146EA1F919700B5679F20</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -77,12 +82,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6D5CEDECD3D8DC52EA507E0431BDA8A0</key>
+		<key>5168099F2EBFC99A707C03C9EADE01A5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B11EA6F81BE1E1AA1094CEDD29BD52A1</key>
+		<key>6A9EF7EFE6224135ABB2FDA61C954BD5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6D5CEDECD3D8DC52EA507E0431BDA8A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,12 +107,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C052BEBFBD0AB5218CC64BA3450F6547</key>
+		<key>BF81C3BBE634271F4712195263A39DC0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F7C71DDF5E72D3D2490F7650442322CE</key>
+		<key>C052BEBFBD0AB5218CC64BA3450F6547</key>
 		<dict>
 			<key>primary</key>
 			<true/>

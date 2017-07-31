@@ -186,7 +186,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         }
     }
     
-    /// Sort Feed of Posts by Current Date
+    /// Sort Feed of Posts by Current Date (Does not work)
     func sortDatesFor(this: Post, that: Post) -> Bool {
         return this.currentDate > that.currentDate
     }

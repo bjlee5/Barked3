@@ -63,7 +63,6 @@ class UserCell: UITableViewCell {
             if let following = snapshot.value as? [String: AnyObject] {
                 for (_, value) in following {
                     if value as! String == indexPath {
-                        self.isFollower = true
                         self.followButton.image = UIImage(named: "followed")
                     } else {
                         self.followButton.image = UIImage(named: "follow")
@@ -71,8 +70,7 @@ class UserCell: UITableViewCell {
                     }
                 }
             })
-
-    }
+        }
     
     func checkFollowing(indexPath: String) {
         

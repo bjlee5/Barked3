@@ -230,9 +230,6 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         pickerView.isHidden = false
     }
     
-    
-
-
     @IBAction func backBtnPrs(_ sender: Any) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInVC")
         self.present(vc, animated: true, completion: nil)

@@ -31,10 +31,13 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var currentUser: UILabel!
     @IBOutlet weak var chooseImage: UIButton!
+    @IBOutlet weak var cancelBtn: UIButton!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        cancelBtn.isHidden = true
         
         // Button Animation
         self.chooseImage.setBackgroundColor(color: UIColor.clear, forState: .normal)
@@ -44,7 +47,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         self.chooseImage.setBackgroundColor(color: UIColor.white, forState: .selected)
         self.chooseImage.setTitleColor(UIColor.purple, for: .selected)
  
-        
+
         profilePic.isHidden = true
         currentUser.isHidden = true
         chooseImage.isHidden = false
@@ -140,9 +143,12 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Actions
+    
     @IBAction func chooseImage(_ sender: Any) {
         present(imagePicker, animated: true, completion: nil)
         chooseImage.isHidden = true
+        cancelBtn.isHidden = false 
     }
     
 
@@ -210,6 +216,16 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         }
     }
     
+    @IBAction func cancelPressed(_ sender: Any) {
+        chooseImage.isHidden = false
+        cancelBtn.isHidden = true
+        postImage.image = UIImage(named: "golden 2")
+    }
+    
+    
+    
+    // MARK: Helper Methods
+    
     func imagesForPost(imgUrl: String) -> String {
         let mainImg = imgUrl
         return mainImg
@@ -217,8 +233,10 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     
     // Retrieve the Current Date //
     
+
     let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.none)
-    
+
+
     // Posting to Firebase //
     
     func postToFirebase(imgUrl: String, imgUrlr: String) {

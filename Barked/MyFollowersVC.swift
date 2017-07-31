@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 import AudioToolbox
 
-class MyFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UserCellSubclassDelegate {
+class MyFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UserCellSubclassDelegate, UserCellProfilePressDelegate {
     
     var users = [Friend]()
     var displayedUsers = [String]()
@@ -142,6 +142,27 @@ class MyFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         ref.removeAllObservers()
         
     }
+    
+    func profileBtnTapped(cell: UserCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else { return }
+        
+        //  Do whatever you need to do with the indexPath
+        
+        print("BRIAN: Button tapped on row \(indexPath.row)")
+        let clickedUser = followingUsers[indexPath.row].userID
+        self.selectedUID = clickedUser!
+        self.checkSelectedUID()
+    }
+    
+    func checkSelectedUID() {
+        if selectedUID != "" {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "FriendProfileVC") as! FriendProfileVC
+            vc.selectedUID = selectedUID
+            self.present(vc, animated: true, completion: nil)
+            
+        }
+    }
 
     
     // MARK: - TableView
@@ -155,6 +176,7 @@ class MyFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let friend = followingUsers[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserCell {
             cell.userDelegate = self
+            cell.profileDelegate = self 
             cell.userName.text = friend.username
             cell.userID = friend.userID
             cell.userImage.downloadImage(from: friend.imagePath!)

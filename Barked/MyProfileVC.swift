@@ -17,6 +17,7 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     var selectedPost: Post!
     var posts = [Post]()
+//    var bestInShowArray = [Post]()
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var profilePicLoaded = false
     var storageRef: FIRStorage {
@@ -56,11 +57,10 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         self.editBtn.setTitleColor(UIColor.purple, for: .highlighted)
         self.editBtn.setBackgroundColor(color: UIColor.white, forState: .selected)
         self.editBtn.setTitleColor(UIColor.purple, for: .selected)
-
+        
         fetchPosts()
         loadUserInfo()
         showStats()
-//        showMoreStats()
         collectionView.reloadData()
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -87,6 +87,14 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         super.viewDidAppear(true)
         showStats()
     }
+    
+//    func bestInShowStats() {
+//        for post in posts {
+//            if post.bestInShow == true {
+//                bestInShowArray.append(post)
+//            }
+//        }
+//    }
     
     // Load Current User Info
     
@@ -167,6 +175,7 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let uid = FIRAuth.auth()!.currentUser!.uid
         let ref = FIRDatabase.database().reference()
+        
         
         ref.child("users").child(uid).child("following").queryOrderedByKey().observe(.value, with: { (snapshot) in
             if let following = snapshot.value as? [String: AnyObject] {
