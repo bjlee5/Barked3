@@ -15,7 +15,6 @@ import FBSDKLoginKit
 import UserNotifications
 import IQKeyboardManagerSwift
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate {
     
@@ -37,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
+        
+        UITabBar.appearance().tintColor = UIColor.white
         
         IQKeyboardManager.sharedManager().enable = true
         FIRApp.configure()

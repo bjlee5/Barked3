@@ -132,7 +132,6 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         }
     }
     
-    
     // Image Picker Controller
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -233,9 +232,15 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     
     // Retrieve the Current Date //
     
-
-    let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.none)
-
+    func formatDate() -> String {
+    let date = Date()
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MM.dd.yyyy"
+    let result = formatter.string(from: date)
+        return result
+}
+    
+//    let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
 
     // Posting to Firebase //
     
@@ -251,7 +256,7 @@ class PostVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
             "likes": 0,
             "postUser": currentUser.text!,
             "profilePicURL": imgUrlr,
-            "currentDate": realDate,
+            "currentDate": formatDate(),
             "uid": uid!,
             "bestInShow": false
         ]

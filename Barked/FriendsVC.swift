@@ -18,6 +18,9 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     let searchController = UISearchController(searchResultsController: nil)
     var selectedUID: String = ""
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+    var storageRef: FIRStorage { return FIRStorage.storage() }
+    var currentUsername: String!
+    var currentUserPic: UIImage!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -37,6 +40,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         friendsTableView.dataSource = self
         friendsTableView.delegate = self
         retrieveUser()
+        loadUserInfo()
         
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -44,8 +48,8 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         friendsTableView.tableHeaderView = searchController.searchBar
         
         
-        //Styling for background view
-        friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
+//        //Styling for background view
+//        friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,6 +66,34 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         })
     }
     
+    // MARK: Helper Methods
+    
+    /// Retrieves Current Users Information
+    func loadUserInfo() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let imageURL = user.photoURL!
+            self.currentUsername = user.username
+            
+            /// We are downloading the current user's ImageURL then converting it using "data" to the UIImage which takes a property of data
+            self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+                if error == nil {
+                    DispatchQueue.main.async {
+                        if let data = imgData {
+                            self.currentUserPic = UIImage(data: data)
+                        }
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// Schedules Push Notifications
     func scheduleNotifications() {
         userRef.observe(.value, with: { (snapshot) in
             
@@ -87,6 +119,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         }
     }
     
+    /// Path to Users profile
     func profileBtnTapped(cell: UserCell) {
         guard let indexPath = self.friendsTableView.indexPath(for: cell) else { return }
         
@@ -111,7 +144,8 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             destinationViewController.selectedUID = selectedUID
         }
     }
-            
+    
+    /// Follows or Unfollows a user
     func buttonTapped(cell: UserCell) {
         self.playSound()
         self.soundEffect()
@@ -131,7 +165,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         } else {
             clickedUser = users[indexPath.row].userID
         }
-                
+        
         let uid = FIRAuth.auth()!.currentUser!.uid
         let ref = FIRDatabase.database().reference()
         let key = ref.child("users").childByAutoId().key
@@ -164,24 +198,48 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
                 ref.child("users").child(uid).updateChildValues(following)
                 ref.child("users").child(clickedUser).updateChildValues(followers)
                 
-                cell.followButton.image = UIImage(named: "followed")
+                
+                cell.followButton.image = UIImage(named: "following")
                 
             }
             
         })
         
+        if isFollower == false {
+            
+            if let imgData = UIImageJPEGRepresentation(currentUserPic, 0.2) {
+                
+                let imgUid = NSUUID().uuidString
+                let metadata = FIRStorageMetadata()
+                metadata.contentType = "image/jpeg"
+                
+                DataService.ds.REF_POST_IMAGES.child(imgUid).put(imgData, metadata: metadata) { (metdata, error) in
+                    if error != nil {
+                        print("BRIAN: Unable to upload image to Firebase storage")
+                    } else {
+                        print("BRIAN: Successfully printed image to Firebase")
+                        let downloadURL = metdata?.downloadURL()?.absoluteString
+                        if let url = downloadURL {
+                            self.followingNotification(imgURL: url, selectedPostUID: clickedUser)
+                        }
+                    }
+                }
+            }
+        }
+        
+        
         ref.removeAllObservers()
         
     }
     
+    /// Helper method to segue to FriendProfileVC
     func checkSelectedUID() {
         if selectedUID != "" {
             performSegue(withIdentifier: "FriendProfileVC", sender: self)
     }
 }
     
-    // Search Functionality
-    
+    /// Search Functionality
     func filterContentForSearchText(searchText: String, scope: String = "All") {
         filteredUsers = users.filter { user in
             return user.username.lowercased().contains(searchText.lowercased())
@@ -190,7 +248,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         friendsTableView.reloadData()
     }
     
-    /// Pulls down users from Firebase and assigsn them to [Friend]
+    /// Pulls down users from Firebase and assigns them to [Friend]
     func retrieveUser() {
         let ref = FIRDatabase.database().reference()
         ref.child("users").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
@@ -222,7 +280,34 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         
     }
     
-    // MARK: - Table view data source
+    ///Retrieves Current Date
+    func formatDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        return result
+    }
+    
+    /// Notification for Following User 
+    func followingNotification(imgURL: String, selectedPostUID: String) {
+        
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        
+        let notification: Dictionary<String, Any> = [
+            "comment": "\(currentUsername!) is now following you!",
+            "photoURL": imgURL,
+            "read": false,
+            "uid": uid!,
+            "username": "\(currentUsername!)",
+            "currentDate": formatDate()
+        ]
+        
+        let firebaseNotify = DataService.ds.REF_USERS.child(selectedPostUID).child("notifications").childByAutoId()
+        firebaseNotify.setValue(notification)
+    }
+    
+    // MARK: TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != "" {

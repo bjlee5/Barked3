@@ -63,7 +63,7 @@ class UserCell: UITableViewCell {
             if let following = snapshot.value as? [String: AnyObject] {
                 for (_, value) in following {
                     if value as! String == indexPath {
-                        self.followButton.image = UIImage(named: "followed")
+                        self.followButton.image = UIImage(named: "following")
                     } else {
                         self.followButton.image = UIImage(named: "follow")
                         }
@@ -81,7 +81,7 @@ class UserCell: UITableViewCell {
                     if let following = snapshot.value as? [String: AnyObject] {
                         for (_, value) in following {
                             if value as! String == indexPath {
-                                self.followButton.image = UIImage(named: "followed")
+                                self.followButton.image = UIImage(named: "following")
                             }
                         }
                     }

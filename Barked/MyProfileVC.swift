@@ -17,13 +17,15 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     var selectedPost: Post!
     var posts = [Post]()
-//    var bestInShowArray = [Post]()
+    var bestInShowArray = [Post]()
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var profilePicLoaded = false
     var storageRef: FIRStorage {
         return FIRStorage.storage()
     }
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+    let ref = FIRDatabase.database().reference()
+    var bestInShowAmount = 0
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -59,13 +61,11 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         self.editBtn.setTitleColor(UIColor.purple, for: .selected)
         
         fetchPosts()
+        fetchBestPosts()
         loadUserInfo()
-        showStats()
-        collectionView.reloadData()
         collectionView.delegate = self
         collectionView.dataSource = self
         bestInShowImage.isHidden = true
-    
         
         /////////////// Layout /////////////////
         
@@ -92,8 +92,11 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
 //        for post in posts {
 //            if post.bestInShow == true {
 //                bestInShowArray.append(post)
+//                print("Best in show is run")
 //            }
 //        }
+//        
+//        ref.removeAllObservers()
 //    }
     
     // Load Current User Info
@@ -145,7 +148,6 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.posts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                print("LEE: \(snapshot)")
                 for snap in snapshot {
                     
                     if let postDict = snap.value as? Dictionary<String, AnyObject> {
@@ -155,23 +157,54 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                                 let key = snap.key
                                 let post = Post(postKey: key, postData: postDict)
                                 self.posts.append(post)
-                                
+
                             }
                         }
                     }
                 }
                 
                 self.collectionView.reloadData()
-                self.posts.sort(by: self.sortDatesFor)
             }
         })
+        
+        ref.removeAllObservers()
+        
+    }
+    
+    /// Grabbing the Posts from Firebase
+    func fetchBestPosts() {
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.bestInShowArray = []
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["bestInShow"] as? String {
+                            if postUser == "true" {
+                                
+                                let key = snap.key
+                                let post = Post(postKey: key, postData: postDict)
+                                self.bestInShowArray.append(post)
+
+                            }
+                        }
+                    }
+                }
+                
+                self.collectionView.reloadData()
+            }
+        })
+        
+        ref.removeAllObservers()
         
     }
     
     func showStats() {
         
+//        bestInShowStats()
         var followersDict = [""]
         var followingDict = [""]
+        var bestInShowDict = [Post]()
         
         let uid = FIRAuth.auth()!.currentUser!.uid
         let ref = FIRDatabase.database().reference()
@@ -196,11 +229,25 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                         followingDict.append(myFollowing)
                         self.myFollowersAmount.text = "\(followingDict.count)"
                     }
-                    
+
                 }
             }
         })
         
+        for post in posts {
+             DataService.ds.REF_POSTS.child(post.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
+                        if let postDict = snapshot.value as? Dictionary<String, AnyObject> {
+                            print("WOOBZ - \(postDict)")
+                            if let postUser = postDict["bestInShow"] as? Bool {
+                                print("WOOBZ - \(postUser)")
+                                if postUser == true {
+                                    bestInShowDict.append(post)
+                                    self.myPostsAmount.text = "\(bestInShowDict.count)"
+                    }
+                }
+            }
+        })
+    }
         ref.removeAllObservers()
         
     }
@@ -221,9 +268,9 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        myPostsAmount.text = "\(posts.count)"
-
+        
         let post = posts[indexPath.row]
+        print("The collection view is executed")
         
         for pst in posts {
             if pst.bestInShow == true {

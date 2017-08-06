@@ -29,6 +29,8 @@ class PostCell: UITableViewCell {
     var likesRef: FIRDatabaseReference!
     var storageRef: FIRStorage { return FIRStorage.storage() }
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+    var currentUsername: String!
+    var currentUserPic: UIImage!
     
     @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var profilePic: BoarderedCircleImage!
@@ -63,14 +65,27 @@ class PostCell: UITableViewCell {
     
     // Load Current User //
     
-    func loadUserInfo(){
-        let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
+    /// Retrieves Current Users Information
+    func loadUserInfo() {
         userRef.observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
-            self.username.text = user.username
-        })
-        { (error) in
+            let imageURL = user.photoURL!
+            self.currentUsername = user.username
+            
+            /// We are downloading the current user's ImageURL then converting it using "data" to the UIImage which takes a property of data
+            self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+                if error == nil {
+                    DispatchQueue.main.async {
+                        if let data = imgData {
+                            self.currentUserPic = UIImage(data: data)
+                        }
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }) { (error) in
             print(error.localizedDescription)
         }
     }
@@ -134,7 +149,7 @@ class PostCell: UITableViewCell {
     
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
-                self.likesImage.image = UIImage(named: "Paw")
+                self.likesImage.image = UIImage(named: "Paw1")
             } else {
                 self.likesImage.image = UIImage(named: "PawFilled")
             }
@@ -142,20 +157,17 @@ class PostCell: UITableViewCell {
     }
 
     func likesTapped(sender: UIGestureRecognizer) {
-        if post.uid != FIRAuth.auth()?.currentUser?.uid {
-            scheduleNotifications()
-        } else {
-            print("WOOBLES - Dog, this is your post...")
-        }
+        loadUserInfo()
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
+                self.downloadLikingUserPhoto()
                 self.barkSoundEffect()
                 self.playSound()
                 self.likesImage.image = UIImage(named: "PawFilled")
                 self.post.adjustLikes(addLike: true)
                 self.likesRef.setValue(true)
             } else {
-                self.likesImage.image = UIImage(named: "Paw")
+                self.likesImage.image = UIImage(named: "Paw1")
                 self.post.adjustLikes(addLike: false)
                 self.likesRef.removeValue()
             }
@@ -163,16 +175,16 @@ class PostCell: UITableViewCell {
     }
     
     func scheduleNotifications() {
+        
         userRef.observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
             let notifyingUser = String(user.username)
-            print("WOOBLES - Schedule notification is run!!!")
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
             var badge = 0
             badge += 1
-            content.body = "\(notifyingUser!) liked your photo!"
+            content.body = "\(self.username.text) liked your photo!"
             content.sound = UNNotificationSound.default()
             content.badge = badge as NSNumber
             
@@ -186,6 +198,63 @@ class PostCell: UITableViewCell {
             }
         }) { (error) in
             print(error.localizedDescription)
+        }
+    }
+    
+    // Retrieve the Current Date //
+    
+    func formatDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        return result
+    }
+    
+    
+    func likeNotification(imgURL: String) {
+        loadUserInfo()
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        
+        let notification: Dictionary<String, Any> = [
+            "comment": "\(currentUsername!) likes your photo!",
+            "photoURL": imgURL,
+            "read": false,
+            "uid": uid!,
+            "username": "\(currentUsername!)",
+            "currentDate": formatDate()
+        ]
+        
+        let firebaseNotify = DataService.ds.REF_USERS.child(self.post.uid).child("notifications").childByAutoId()
+        firebaseNotify.setValue(notification)
+        
+    }
+    
+    func downloadLikingUserPhoto() {
+        
+        guard let proImg = profilePic.image else {
+            print("BRIAN: The user has no profile pic!")
+            return
+        }
+        
+        if let imgData = UIImageJPEGRepresentation(proImg, 0.2) {
+            
+            let imgUid = NSUUID().uuidString
+            let metadata = FIRStorageMetadata()
+            metadata.contentType = "image/jpeg"
+            
+            DataService.ds.REF_POST_IMAGES.child(imgUid).put(imgData, metadata: metadata) { (metdata, error) in
+                if error != nil {
+                    print("BRIAN: Unable to upload image to Firebase storage")
+                } else {
+                    print("BRIAN: Successfully printed image to Firebase")
+                    let downloadURL = metdata?.downloadURL()?.absoluteString
+                    if let url = downloadURL {
+                        self.likeNotification(imgURL: url)
+                    }
+                }
+            
+            }
         }
     }
     
