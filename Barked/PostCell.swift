@@ -184,7 +184,7 @@ class PostCell: UITableViewCell {
             let content = UNMutableNotificationContent()
             var badge = 0
             badge += 1
-            content.body = "\(self.username.text) liked your photo!"
+            content.body = "\(self.currentUsername) liked your photo!"
             content.sound = UNNotificationSound.default()
             content.badge = badge as NSNumber
             
@@ -217,7 +217,7 @@ class PostCell: UITableViewCell {
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [
-            "comment": "\(currentUsername!) likes your photo!",
+            "comment": "\(currentUsername!) liked your photo!",
             "photoURL": imgURL,
             "read": false,
             "uid": uid!,
@@ -232,7 +232,9 @@ class PostCell: UITableViewCell {
     
     func downloadLikingUserPhoto() {
         
-        guard let proImg = profilePic.image else {
+        scheduleNotifications()
+        
+        guard let proImg = currentUserPic else {
             print("BRIAN: The user has no profile pic!")
             return
         }
@@ -257,9 +259,6 @@ class PostCell: UITableViewCell {
             }
         }
     }
-    
-
-    
     
     @IBAction func userPressed(_ sender: Any) {
     self.delegate?.buttonTapped(cell: self)

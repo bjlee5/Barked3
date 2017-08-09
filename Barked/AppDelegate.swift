@@ -19,7 +19,7 @@ import IQKeyboardManagerSwift
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate {
     
     var window: UIWindow?
-    
+        
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         if #available(iOS 10.0, *) {
@@ -36,9 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
-        
-        UITabBar.appearance().tintColor = UIColor.white
-        
+                
         IQKeyboardManager.sharedManager().enable = true
         FIRApp.configure()
         UIApplication.shared.unregisterForRemoteNotifications()

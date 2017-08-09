@@ -34,7 +34,6 @@ class FriendFollowersVC: UIViewController, UITableViewDelegate, UITableViewDataS
         uidToFriend()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
     }
     
     // MARK: - Helper Functions

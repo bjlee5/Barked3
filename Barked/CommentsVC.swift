@@ -57,29 +57,29 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Notifications
     
-//    func scheduleNotifications(username: String) {
-//        userRef.observe(.value, with: { (snapshot) in
-//            
-//            let user = Users(snapshot: snapshot)
-//            let notifyingUser = String(user.username)
-//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
-//                let content = UNMutableNotificationContent()
-//                content.body = "\(username) commented on your photo!"
-//                content.sound = UNNotificationSound.default()
-//                content.badge = 1
-//                
-//                let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
-//                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-//                UNUserNotificationCenter.current().add(request) { (error: Error?) in
-//                    if let error = error {
-//                        print("Error is \(error.localizedDescription)")
-//                        
-//                    }
-//                }
-//        }) { (error) in
-//            print(error.localizedDescription)
-//        }
-//    }
+    func scheduleNotifications(username: String) {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+                let content = UNMutableNotificationContent()
+                content.body = "\(username) commented on your photo!"
+                content.sound = UNNotificationSound.default()
+                content.badge = NOTE_BADGE_NUMBER as! NSNumber
+                
+                let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                    if let error = error {
+                        print("Error is \(error.localizedDescription)")
+                        
+                    }
+                }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
     
     // Retrieve the Current Date //
     
@@ -103,7 +103,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 "username": "\(self.currentUsername.text!)",
                 "currentDate": formatDate()
                 ]
-        
+        scheduleNotifications(username: "\(currentUsername)")
         let firebaseNotify = DataService.ds.REF_USERS.child(self.selectedPost.uid).child("notifications").childByAutoId()
         firebaseNotify.setValue(notification)
     }
@@ -323,7 +323,6 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let downloadURL = metdata?.downloadURL()?.absoluteString
                     if let url = downloadURL {
                         self.postToFirebase(imgUrl: url)
-                        self.commentNotification(imgURL: url)
                     }
                 }
             }

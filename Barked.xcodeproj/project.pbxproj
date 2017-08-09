@@ -61,7 +61,6 @@
 		D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E210B01EB40FE300067DA9 /* DataService.swift */; };
 		D0FFA9271F3227E900C6BDC1 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FFA9261F3227E900C6BDC1 /* Notification.swift */; };
 		D0FFA9291F32352900C6BDC1 /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FFA9281F32352900C6BDC1 /* NotificationCell.swift */; };
-		D0FFA92B1F32475900C6BDC1 /* PostNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FFA92A1F32475900C6BDC1 /* PostNotification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,7 +123,6 @@
 		D0E210B01EB40FE300067DA9 /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		D0FFA9261F3227E900C6BDC1 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		D0FFA9281F32352900C6BDC1 /* NotificationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
-		D0FFA92A1F32475900C6BDC1 /* PostNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostNotification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +221,6 @@
 				D0790AB21ED8CB9100684667 /* Breeds.swift */,
 				D0BEC9291EE71805000181DA /* Comment.swift */,
 				D0FFA9261F3227E900C6BDC1 /* Notification.swift */,
-				D0FFA92A1F32475900C6BDC1 /* PostNotification.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -464,7 +461,6 @@
 				D075DAE21EB79E880099292E /* PostVC.swift in Sources */,
 				D047E4071F3018C2007814D4 /* BestInShowVC.swift in Sources */,
 				D0E210AD1EB40FD100067DA9 /* Constants.swift in Sources */,
-				D0FFA92B1F32475900C6BDC1 /* PostNotification.swift in Sources */,
 				D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */,
 				D07CB60C1F22612F00034CB8 /* MyFollowingVC.swift in Sources */,
 				D075DAED1EB8C2F40099292E /* SexyField.swift in Sources */,

@@ -31,6 +31,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         // Observer to Update TableView in Realtime
         
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
@@ -94,6 +95,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     }
     
     /// Schedules Push Notifications
+    
     func scheduleNotifications() {
         userRef.observe(.value, with: { (snapshot) in
             
@@ -104,7 +106,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             let content = UNMutableNotificationContent()
             content.body = "\(notifyingUser!) is now following you!"
             content.sound = UNNotificationSound.default()
-            content.badge = 1
+            content.badge = NOTE_BADGE_NUMBER as! NSNumber
             
             let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -303,6 +305,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             "currentDate": formatDate()
         ]
         
+        scheduleNotifications()
         let firebaseNotify = DataService.ds.REF_USERS.child(selectedPostUID).child("notifications").childByAutoId()
         firebaseNotify.setValue(notification)
     }

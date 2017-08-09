@@ -27,7 +27,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         super.viewDidLoad()
         
         tabBarController?.tabBar.items?[3].badgeValue = nil
-        NOTE_BADGE_NUMBER = 0
         
         fetchNotifications()
         tableView.delegate = self
@@ -38,7 +37,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         tabBarController?.tabBar.items?[3].badgeValue = nil
-        NOTE_BADGE_NUMBER = 0
     }
     
     func fetchNotifications() {
@@ -101,24 +99,24 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         return this.currentDate > that.currentDate
     }
     
-//    func notificationsAreRead() {
-//        DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
-//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                for snap in snapshot {
-//                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-//                        if let postUser = postDict["read"] as? Bool {
-//                            if postUser == false {
-//                    
-//                                self.updateNotes()
-//                                self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
-//                                
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        })
-//    }
+    func notificationsAreRead() {
+        DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["read"] as? Bool {
+                            if postUser == false {
+                    
+                                self.updateNotes()
+                                self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
     
     func updateNotes() {
         for note in notifications {
