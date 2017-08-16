@@ -39,6 +39,11 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         tabBarController?.tabBar.items?[3].badgeValue = nil
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        updateNotes()
+    }
+    
     func fetchNotifications() {
         DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
             self.notifications = []
@@ -55,16 +60,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 }
                 self.notifications.sort(by: self.sortDatesFor)
                 self.tableView.reloadData()
-                self.updateNotes()
             }
         })
         
-    }
-    
-    /// Playing around with change values in Firebase 
-    
-    func firebaseChangeObserver() {
-        DataService.ds.REF_USERS.child("someUID").child("notifications")
     }
     
     // MARK: TableView 
@@ -75,6 +73,24 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell", for: indexPath) as! NotificationCell
+        
+        DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["read"] as? Bool {
+                            if postUser == false {
+                                self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
+                                // Unread is showing
+                            } else if postUser == true {
+                                // Unread is hidden
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        
         let notification = notifications[indexPath.row]
         cell.notificationLabel.text = notifications[indexPath.row].comment
         
@@ -93,29 +109,10 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     // MARK: Helper Functions
-    
+        
     /// Sort Feed of Posts by Current Date
     func sortDatesFor(this: Notification, that: Notification) -> Bool {
         return this.currentDate > that.currentDate
-    }
-    
-    func notificationsAreRead() {
-        DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        if let postUser = postDict["read"] as? Bool {
-                            if postUser == false {
-                    
-                                self.updateNotes()
-                                self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
-                                
-                            }
-                        }
-                    }
-                }
-            }
-        })
     }
     
     func updateNotes() {
@@ -126,6 +123,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 updatedNote.adjustNotifications(read: true)
         })
     }
+    
+    NOTE_BADGE_NUMBER = 0
 }
 
 

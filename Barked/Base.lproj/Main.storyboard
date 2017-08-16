@@ -655,8 +655,8 @@
                                             <action selector="profileBtn:" destination="4Tl-Fx-V5A" eventType="touchUpInside" id="tF5-s3-lDP"/>
                                         </connections>
                                     </button>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewHeaderLogo" translatesAutoresizingMaskIntoConstraints="NO" id="hze-mG-fck">
-                                        <rect key="frame" x="147" y="5" width="116" height="30"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BarkdLogo" translatesAutoresizingMaskIntoConstraints="NO" id="hze-mG-fck">
+                                        <rect key="frame" x="137" y="5" width="116" height="30"/>
                                         <color key="backgroundColor" red="0.49942582845687866" green="0.49633467197418213" blue="0.69998031854629517" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="bGD-ie-hwj"/>
@@ -666,7 +666,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.4994258285" green="0.49633467199999998" blue="0.69998031849999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="hze-mG-fck" firstAttribute="leading" secondItem="ibY-o4-AK6" secondAttribute="leading" constant="147" id="2a4-vq-ZDA"/>
+                                    <constraint firstItem="hze-mG-fck" firstAttribute="leading" secondItem="ibY-o4-AK6" secondAttribute="leading" constant="137" id="2a4-vq-ZDA"/>
                                     <constraint firstAttribute="trailing" secondItem="nqT-94-9cG" secondAttribute="trailing" constant="9" id="PAc-2b-vDK"/>
                                     <constraint firstItem="hze-mG-fck" firstAttribute="top" secondItem="ibY-o4-AK6" secondAttribute="top" constant="5" id="RVb-Ug-vA6"/>
                                     <constraint firstItem="nqT-94-9cG" firstAttribute="top" secondItem="ibY-o4-AK6" secondAttribute="top" constant="6" id="U7R-eM-Owj"/>
@@ -768,7 +768,8 @@
                             <constraint firstItem="7Gk-OI-1k9" firstAttribute="top" secondItem="zKR-Qo-gYC" secondAttribute="bottom" constant="40" id="vNM-Qs-aU7"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="Search" selectedImage="Search" id="SEn-i6-XKB">
+                    <tabBarItem key="tabBarItem" title="" image="Search" selectedImage="SearchSelected" id="SEn-i6-XKB">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="unselectedTintColor">
                                 <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -791,7 +792,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="3079.7101449275365" y="133.69565217391306"/>
+            <point key="canvasLocation" x="3079" y="13"/>
         </scene>
         <!--Forgot PasswordVC-->
         <scene sceneID="fsK-bs-7hh">
@@ -1022,7 +1023,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.63921568627450975" green="0.60784313725490191" blue="0.77647058823529413" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="KA4-sA-jxy" firstAttribute="top" secondItem="MSn-5k-YHj" secondAttribute="bottom" constant="1" id="0Ru-ka-01x"/>
                             <constraint firstItem="fag-pj-Iyt" firstAttribute="top" secondItem="KA4-sA-jxy" secondAttribute="bottom" constant="15" id="5EJ-LQ-tf2"/>
@@ -1046,6 +1047,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="Add Pic" selectedImage="Add Pic" id="eMI-kQ-ZYG">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="keyPath">
                                 <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1494,8 +1496,8 @@
                                                     <constraint firstAttribute="height" constant="75" id="n3N-or-Sgj"/>
                                                 </constraints>
                                             </pickerView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewHeaderLogo" translatesAutoresizingMaskIntoConstraints="NO" id="UeZ-uV-geK">
-                                                <rect key="frame" x="130" y="30" width="114" height="32"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BarkdLogo" translatesAutoresizingMaskIntoConstraints="NO" id="UeZ-uV-geK">
+                                                <rect key="frame" x="145" y="30" width="112" height="32"/>
                                                 <color key="backgroundColor" red="0.49420720338821411" green="0.50638288259506226" blue="0.70752644538879395" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="sah-aq-0xd"/>
@@ -1526,7 +1528,7 @@
                                             <constraint firstItem="V6N-1i-IQe" firstAttribute="top" secondItem="yWB-UO-Ffb" secondAttribute="top" id="FBD-ZB-J0G"/>
                                             <constraint firstAttribute="trailing" secondItem="58M-Wv-3wG" secondAttribute="trailing" constant="10" id="G05-r7-lK5"/>
                                             <constraint firstItem="RlV-h2-ZMh" firstAttribute="top" secondItem="yWB-UO-Ffb" secondAttribute="top" id="H92-ts-jgo"/>
-                                            <constraint firstItem="UeZ-uV-geK" firstAttribute="leading" secondItem="TMF-aY-edi" secondAttribute="leading" constant="130" id="Jgc-da-KgM"/>
+                                            <constraint firstItem="UeZ-uV-geK" firstAttribute="leading" secondItem="TMF-aY-edi" secondAttribute="leading" constant="145" id="Jgc-da-KgM"/>
                                             <constraint firstItem="idu-oM-hBV" firstAttribute="top" secondItem="bjX-a3-Jhd" secondAttribute="bottom" constant="154" id="Lgq-xn-8gh"/>
                                             <constraint firstItem="HGq-H2-gOv" firstAttribute="leading" secondItem="TMF-aY-edi" secondAttribute="leading" constant="8" id="R1R-Y6-WEL"/>
                                             <constraint firstItem="58M-Wv-3wG" firstAttribute="top" secondItem="TMF-aY-edi" secondAttribute="top" constant="8" id="RNh-u8-9rA"/>
@@ -2028,8 +2030,8 @@
                                     <constraint firstAttribute="width" constant="20" id="q9T-42-HmG"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewHeaderLogo" translatesAutoresizingMaskIntoConstraints="NO" id="GgQ-HE-NCt">
-                                <rect key="frame" x="147" y="30" width="114" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BarkdLogo" translatesAutoresizingMaskIntoConstraints="NO" id="GgQ-HE-NCt">
+                                <rect key="frame" x="137" y="30" width="112" height="30"/>
                                 <color key="backgroundColor" red="0.49420720340000002" green="0.50638288259999997" blue="0.70752644539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="kiS-ut-3pp"/>
@@ -2046,7 +2048,7 @@
                             <constraint firstItem="fYr-D2-l22" firstAttribute="top" secondItem="TxN-Tv-jls" secondAttribute="top" id="MyP-3d-dEz"/>
                             <constraint firstItem="Tbe-nk-tQf" firstAttribute="top" secondItem="ubH-ZR-NiL" secondAttribute="bottom" constant="13" id="NOk-17-Mf5"/>
                             <constraint firstItem="S27-Av-8sy" firstAttribute="top" secondItem="CNV-Jh-qAJ" secondAttribute="bottom" constant="-49" id="fZS-St-Pix"/>
-                            <constraint firstItem="GgQ-HE-NCt" firstAttribute="leading" secondItem="TxN-Tv-jls" secondAttribute="leading" constant="147" id="j2k-qV-ZAv"/>
+                            <constraint firstItem="GgQ-HE-NCt" firstAttribute="leading" secondItem="TxN-Tv-jls" secondAttribute="leading" constant="137" id="j2k-qV-ZAv"/>
                             <constraint firstItem="CNV-Jh-qAJ" firstAttribute="top" secondItem="TxN-Tv-jls" secondAttribute="top" constant="65" id="naa-3R-kdI"/>
                             <constraint firstItem="S27-Av-8sy" firstAttribute="leading" secondItem="TxN-Tv-jls" secondAttribute="leading" id="rKL-sO-W5f"/>
                             <constraint firstItem="CNV-Jh-qAJ" firstAttribute="leading" secondItem="TxN-Tv-jls" secondAttribute="leading" id="uII-QZ-YXf"/>
@@ -2089,8 +2091,8 @@
                                     <constraint firstAttribute="height" constant="25" id="iDh-9i-1JR"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewHeaderLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Bm9-WW-dgP">
-                                <rect key="frame" x="151" y="30" width="114" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BarkdLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Bm9-WW-dgP">
+                                <rect key="frame" x="147" y="30" width="112" height="30"/>
                                 <color key="backgroundColor" red="0.49420720338821411" green="0.50638288259506226" blue="0.70752644538879395" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="0nu-bZ-xmy"/>
@@ -2125,17 +2127,27 @@
                                                     <color key="textColor" red="0.46274509800000002" green="0.41960784309999999" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Unread" translatesAutoresizingMaskIntoConstraints="NO" id="BrN-tO-FKB" userLabel="Unread">
+                                                    <rect key="frame" x="33" y="4" width="15" height="15"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="Jce-R5-A1r"/>
+                                                        <constraint firstAttribute="width" constant="15" id="cbt-hK-Tbn"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="OQK-dl-Yic" firstAttribute="leading" secondItem="zlm-qq-23D" secondAttribute="trailing" constant="10" id="JaH-Bm-ddh"/>
+                                                <constraint firstItem="BrN-tO-FKB" firstAttribute="top" secondItem="acO-cf-NmN" secondAttribute="top" constant="4" id="OkB-eH-KJF"/>
                                                 <constraint firstItem="zlm-qq-23D" firstAttribute="leading" secondItem="acO-cf-NmN" secondAttribute="leading" constant="8" id="Omc-or-YHb"/>
                                                 <constraint firstItem="OQK-dl-Yic" firstAttribute="trailing" secondItem="acO-cf-NmN" secondAttribute="trailingMargin" constant="8" id="irO-eF-mQr"/>
+                                                <constraint firstItem="BrN-tO-FKB" firstAttribute="leading" secondItem="acO-cf-NmN" secondAttribute="leading" constant="33" id="nzG-rr-hiF"/>
                                                 <constraint firstItem="OQK-dl-Yic" firstAttribute="top" secondItem="acO-cf-NmN" secondAttribute="topMargin" constant="5" id="qSx-OW-IX4"/>
                                                 <constraint firstItem="zlm-qq-23D" firstAttribute="top" secondItem="acO-cf-NmN" secondAttribute="top" constant="5" id="yOS-KY-z0v"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="notificationLabel" destination="OQK-dl-Yic" id="0qW-qG-VzB"/>
+                                            <outlet property="unreadImage" destination="BrN-tO-FKB" id="Ikd-rS-blP"/>
                                             <outlet property="userImage" destination="zlm-qq-23D" id="fCR-Kb-ebF"/>
                                         </connections>
                                     </tableViewCell>
@@ -2147,7 +2159,7 @@
                             <constraint firstItem="Bm9-WW-dgP" firstAttribute="top" secondItem="N4n-2J-0YT" secondAttribute="bottom" constant="5" id="Bu5-a7-j8A"/>
                             <constraint firstItem="N4n-2J-0YT" firstAttribute="leading" secondItem="M9n-54-JNW" secondAttribute="leading" id="KQb-yW-OhQ"/>
                             <constraint firstItem="5L7-Q6-xGi" firstAttribute="top" secondItem="M9n-54-JNW" secondAttribute="top" constant="65" id="MMs-sy-Jhv"/>
-                            <constraint firstItem="Bm9-WW-dgP" firstAttribute="leading" secondItem="M9n-54-JNW" secondAttribute="leadingMargin" constant="131" id="ShM-CV-hbG"/>
+                            <constraint firstItem="Bm9-WW-dgP" firstAttribute="leading" secondItem="M9n-54-JNW" secondAttribute="leadingMargin" constant="127" id="ShM-CV-hbG"/>
                             <constraint firstItem="N4n-2J-0YT" firstAttribute="top" secondItem="M9n-54-JNW" secondAttribute="top" id="U2q-D0-TNr"/>
                             <constraint firstItem="5L7-Q6-xGi" firstAttribute="leading" secondItem="M9n-54-JNW" secondAttribute="leading" id="bhv-wy-OVc"/>
                             <constraint firstAttribute="trailing" secondItem="5L7-Q6-xGi" secondAttribute="trailing" id="iox-pk-fmX"/>
@@ -2155,7 +2167,8 @@
                             <constraint firstItem="CGM-2j-t2p" firstAttribute="top" secondItem="5L7-Q6-xGi" secondAttribute="bottom" id="rfL-0S-KQq"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" image="Notifications" selectedImage="Notifications" id="Ulp-qj-0wj">
+                    <tabBarItem key="tabBarItem" title="" image="Notifications" selectedImage="Notifications" id="Ulp-qj-0wj">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
                                 <color key="value" red="0.99990516901016235" green="1" blue="0.99987047910690308" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2171,7 +2184,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mW2-nr-Ni1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4613" y="878"/>
+            <point key="canvasLocation" x="4530" y="878"/>
         </scene>
         <!--Friend PostVC-->
         <scene sceneID="EuW-Si-U5a">
@@ -2615,8 +2628,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="951"/>
                                 <color key="backgroundColor" red="0.49683463573455811" green="0.49893301725387573" blue="0.69609624147415161" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </scrollView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewHeaderLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Q96-ry-mEz">
-                                <rect key="frame" x="151" y="30" width="116" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BarkdLogo" highlightedImage="BarkdLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Q96-ry-mEz">
+                                <rect key="frame" x="141" y="30" width="116" height="30"/>
                                 <color key="backgroundColor" red="0.49683463570000003" green="0.4989330173" blue="0.69609624150000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="116" id="PwN-gT-dFL"/>
@@ -2880,7 +2893,7 @@
                             <constraint firstItem="eRE-wk-Mu5" firstAttribute="leading" secondItem="KCx-SH-QaK" secondAttribute="leading" id="aT1-DV-jFf"/>
                             <constraint firstItem="Q5J-Qk-dXS" firstAttribute="leading" secondItem="o4I-qd-Cgt" secondAttribute="trailing" constant="209.66666666666663" id="c8u-f5-EyJ"/>
                             <constraint firstItem="o4I-qd-Cgt" firstAttribute="top" secondItem="eRE-wk-Mu5" secondAttribute="bottom" constant="8" id="c9d-PL-P05"/>
-                            <constraint firstItem="Q96-ry-mEz" firstAttribute="leading" secondItem="KCx-SH-QaK" secondAttribute="leadingMargin" constant="131" id="crO-4X-6Y0"/>
+                            <constraint firstItem="Q96-ry-mEz" firstAttribute="leading" secondItem="KCx-SH-QaK" secondAttribute="leadingMargin" constant="121" id="crO-4X-6Y0"/>
                             <constraint firstAttribute="trailing" secondItem="PvI-Zl-BZh" secondAttribute="trailing" id="iHn-TL-FhL"/>
                             <constraint firstItem="k6m-14-UKu" firstAttribute="leading" secondItem="o4I-qd-Cgt" secondAttribute="trailing" constant="8" id="iYE-O5-fZ9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KP2-X5-1Qj" secondAttribute="trailing" constant="-7" id="kdB-ej-Sik"/>
@@ -2888,7 +2901,10 @@
                             <constraint firstAttribute="trailing" secondItem="eRE-wk-Mu5" secondAttribute="trailing" id="xBI-go-NNn"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="Home" selectedImage="hizzome" id="LLH-o8-Fl2"/>
+                    <tabBarItem key="tabBarItem" title="" image="Home" selectedImage="hizzome" id="LLH-o8-Fl2">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="currentUser" destination="Q5J-Qk-dXS" id="cLt-fU-nIa"/>
                         <outlet property="profilePic" destination="k6m-14-UKu" id="rlw-Z0-hI0"/>
@@ -3064,7 +3080,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="3856.521739130435" y="114.94565217391305"/>
+            <point key="canvasLocation" x="3833" y="13"/>
         </scene>
         <!--My FollowersVC-->
         <scene sceneID="KZp-fP-2g4">
@@ -3232,7 +3248,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="4600" y="114.94565217391305"/>
+            <point key="canvasLocation" x="4611" y="-10"/>
         </scene>
         <!--Friend FollowersVC-->
         <scene sceneID="oxB-VM-cxK">
@@ -3400,7 +3416,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="3856.521739130435" y="-545.38043478260875"/>
+            <point key="canvasLocation" x="3833" y="-809"/>
         </scene>
         <!--Friend FollowingVC-->
         <scene sceneID="IAE-mY-ZSf">
@@ -3560,7 +3576,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uwe-gb-7Cg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <searchDisplayController id="aCh-eT-kY5"/>
             </objects>
-            <point key="canvasLocation" x="3124.6376811594205" y="-545.38043478260875"/>
+            <point key="canvasLocation" x="3079" y="-809"/>
         </scene>
         <!--Best In ShowVC-->
         <scene sceneID="5US-A5-1Xp">
@@ -3859,7 +3875,10 @@
                             <constraint firstAttribute="trailing" secondItem="xMd-bn-mSn" secondAttribute="trailing" id="ySu-3C-Mmj"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="TabBarMedal" selectedImage="TabBarMedal" id="rka-W7-yPT"/>
+                    <tabBarItem key="tabBarItem" title="" image="UnfilledMedal" selectedImage="TabBarMedal" id="rka-W7-yPT">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="currentUser" destination="eFL-Si-Cn7" id="cNV-FW-wjh"/>
                         <outlet property="profilePic" destination="oma-ZX-FQz" id="ssu-cO-gj1"/>
@@ -3874,6 +3893,7 @@
     <resources>
         <image name="Add Pic" width="36" height="33"/>
         <image name="Back" width="17" height="26"/>
+        <image name="BarkdLogo" width="112" height="32"/>
         <image name="BestInShowHeader" width="172" height="32"/>
         <image name="Bitmap" width="375" height="667"/>
         <image name="Choose Profile Pic" width="124" height="120"/>
@@ -3890,7 +3910,6 @@
         <image name="Log Out" width="512" height="512"/>
         <image name="Logo Copy" width="190" height="246"/>
         <image name="Medal" width="23" height="43"/>
-        <image name="NewHeaderLogo" width="114" height="32"/>
         <image name="Notifications" width="23" height="26"/>
         <image name="Paw" width="24" height="24"/>
         <image name="Paw1" width="24" height="24"/>
@@ -3898,10 +3917,13 @@
         <image name="Rectangle" width="375" height="667"/>
         <image name="Rectangle 4" width="375" height="667"/>
         <image name="Search" width="26" height="26"/>
+        <image name="SearchSelected" width="26" height="26"/>
         <image name="Seperator" width="2" height="62"/>
         <image name="Status Bar Rectangle color" width="375" height="18"/>
         <image name="Status bar color Rectangle " width="375" height="20"/>
         <image name="TabBarMedal" width="14" height="26"/>
+        <image name="UnfilledMedal" width="16" height="26"/>
+        <image name="Unread" width="25" height="25"/>
         <image name="email" width="19" height="16"/>
         <image name="follow" width="106" height="20"/>
         <image name="golden 2" width="645" height="380"/>

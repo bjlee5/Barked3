@@ -323,6 +323,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let downloadURL = metdata?.downloadURL()?.absoluteString
                     if let url = downloadURL {
                         self.postToFirebase(imgUrl: url)
+                        self.commentNotification(imgURL: url)
                     }
                 }
             }

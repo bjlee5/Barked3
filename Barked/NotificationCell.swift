@@ -13,6 +13,7 @@ class NotificationCell: UITableViewCell {
 
     @IBOutlet weak var userImage: BoarderedCircleImage!
     @IBOutlet weak var notificationLabel: UILabel!
+    @IBOutlet weak var unreadImage: UIImageView!
     
     
     override func awakeFromNib() {

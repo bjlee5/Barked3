@@ -44,6 +44,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         super.viewDidLoad()
         
         checkNotificationsRead()
+        self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
         self.posts.sort(by: self.sortDatesFor)
         followingFriends()
         loadUserInfo()
@@ -51,43 +52,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         
         tableView.delegate = self
         tableView.dataSource = self
-
-
-//        // Coded Label
-//        
-//        codedLabel.isHidden = true
-//        codedLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-//        codedLabel.textAlignment = .center
-//        codedLabel.text = "There are no posts today"
-//        codedLabel.numberOfLines=1
-//        codedLabel.textColor=UIColor.gray
-//        codedLabel.font=UIFont.systemFont(ofSize: 16)
-//
-//        view.addSubview(codedLabel)
-//        codedLabel.translatesAutoresizingMaskIntoConstraints = false
-//        codedLabel.centerXAnchor.constraint(equalTo: codedLabel.superview!.centerXAnchor).isActive = true
-//        codedLabel.centerYAnchor.constraint(equalTo: codedLabel.superview!.centerYAnchor).isActive = true
-//        
-//        
-//        // Other Label
-//        
-//        otherLabel.isHidden = true
-//        otherLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-//        otherLabel.textAlignment = .center
-//        otherLabel.text = "You are not following anyone"
-//        otherLabel.numberOfLines=1
-//        otherLabel.textColor=UIColor.gray
-//        otherLabel.font=UIFont.systemFont(ofSize: 16)
-//        
-//        view.addSubview(otherLabel)
-//        otherLabel.translatesAutoresizingMaskIntoConstraints = false
-//        otherLabel.centerXAnchor.constraint(equalTo: otherLabel.superview!.centerXAnchor).isActive = true
-//        otherLabel.centerYAnchor.constraint(equalTo: otherLabel.superview!.centerYAnchor).isActive = true
-//        
+        
         profilePic.isHidden = true
         currentUser.isHidden = true
         
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        NOTE_BADGE_NUMBER = 0
     }
     
     // MARK: - Activity Indicator
@@ -391,10 +364,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                             if let postUser = postDict["read"] as? Bool {
                                 print("DYEUCK: \(postUser)")
                                 if postUser == false {
-                                    
-                                self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
                                 NOTE_BADGE_NUMBER += 1
-                                    
                             }
                         }
                     }
