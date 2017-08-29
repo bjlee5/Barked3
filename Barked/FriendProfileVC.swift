@@ -10,12 +10,14 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 import SCLAlertView
+import UserNotifications
 
 class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     // Refactor storage reference //
     
     var selectedUID: String = ""
+    var currentUID: String = ""
     var selectedPost: Post!
     var posts = [Post]()
     var bestInShowArray = [Post]()
@@ -25,6 +27,7 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var currentUsername: String!
     var currentUserProPic: UIImage!
+    var bestInShowDict = [Post]()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -81,7 +84,10 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         showStats()
+
     }
+    
+    // MARK: Helper Functions
     
     /// Load User Info for Following Notification
     func loadNotificationUserInfo() {
@@ -90,6 +96,7 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
             let user = Users(snapshot: snapshot)
             let imageURL = user.photoURL!
             self.currentUsername = user.username
+            self.currentUID = user.uid
             
             /// We are downloading the current user's ImageURL then converting it using "data" to the UIImage which takes a property of data
             self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
@@ -153,8 +160,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         return this.currentDate > that.currentDate
     }
     
-    // MARK: Show Current User Feed
-    
     /// Grabbing the Posts from Firebase
     func fetchPosts() {
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
@@ -177,19 +182,46 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
                     }
                 }
                 
+                self.bestInShowStats()
                 self.collectionView.reloadData()
                 self.posts.sort(by: self.sortDatesFor)
+                
             }
         })
-        
     }
     
+    func bestInShowStats() {
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.bestInShowDict = []
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                print("LEE: \(snapshot)")
+                for snap in snapshot {
+                    
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["uid"] as? String {
+                            if postUser == self.selectedUID {
+                                if let bestInShow = postDict["bestInShow"] as? Bool {
+                                    if bestInShow == true {
+                                        
+                                let bestKey = snap.key
+                                let bestPost = Post(postKey: bestKey, postData: postDict)
+                                self.bestInShowDict.append(bestPost)
+                                self.postAmount.text = "\(self.bestInShowDict.count)"
+                                
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
     
     func showStats() {
 
         var followersDict = [""]
         var followingDict = [""]
-        var bestInShowDict = [Post]()
 
         let ref = FIRDatabase.database().reference()
         
@@ -218,22 +250,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
                 }
             }
         })
-        
-        for post in posts {
-            DataService.ds.REF_POSTS.child(post.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
-                if let postDict = snapshot.value as? Dictionary<String, AnyObject> {
-                    print("WOOBZ - \(postDict)")
-                    if let postUser = postDict["bestInShow"] as? Bool {
-                        print("WOOBZ - \(postUser)")
-                        if postUser == true {
-                            bestInShowDict.append(post)
-                            self.postAmount.text = "\(bestInShowDict.count)"
-                        }
-                    }
-                }
-            })
-        }
-        
         ref.removeAllObservers()
     }
     
@@ -254,8 +270,62 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         
         ref.removeAllObservers()
     }
+    
+    /// Retrieves Current Date
+    func formatDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        return result
+    }
+    
+    func scheduleNotifications() {
+        userRef.observe(.value, with: { (snapshot) in
+            
+            let user = Users(snapshot: snapshot)
+            let notifyingUser = String(user.username)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "You're currently today's best in show!"
+            content.sound = UNNotificationSound.default()
+            content.badge = NOTE_BADGE_NUMBER as NSNumber
+            
+            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// Notification for Following User
+    func followingNotification(imgURL: String, selectedPostUID: String) {
+        
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        
+        let notification: Dictionary<String, Any> = [
+            "comment": "\(currentUsername!) is now following you!",
+            "photoURL": imgURL,
+            "read": false,
+            "uid": uid!,
+            "username": "\(currentUsername!)",
+            "currentDate": formatDate(),
+            "identifier": "\(currentUID)",
+            "type": notificationType.follow.rawValue
+        ]
+        
+        let firebaseNotify = DataService.ds.REF_USERS.child(selectedPostUID).child("notifications").childByAutoId()
+        firebaseNotify.setValue(notification)
+    }
+    
 
-    // Collection View
+    // MARK: Collection View
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -266,7 +336,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        postAmount.text = "\(posts.count)"
         let post = posts[indexPath.row]
         
         for pst in posts {
@@ -303,34 +372,8 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! ProfileCell
         selectedPost = cell.post
+        print("SNOOPY: \(selectedPost)")
         performSegue(withIdentifier: "FriendPostVC", sender: self)
-    }
-    
-    ///Retrieves Current Date
-    func formatDate() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
-        return result
-    }
-    
-    /// Notification for Following User
-    func followingNotification(imgURL: String, selectedPostUID: String) {
-        
-        let uid = FIRAuth.auth()?.currentUser?.uid
-        
-        let notification: Dictionary<String, Any> = [
-            "comment": "\(currentUsername!) is now following you!",
-            "photoURL": imgURL,
-            "read": false,
-            "uid": uid!,
-            "username": "\(currentUsername!)",
-            "currentDate": formatDate()
-        ]
-        
-        let firebaseNotify = DataService.ds.REF_USERS.child(selectedPostUID).child("notifications").childByAutoId()
-        firebaseNotify.setValue(notification)
     }
     
     // MARK: Actions
@@ -343,6 +386,12 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FriendFollowersVC") as! FriendFollowersVC
         vc.selectedUID = selectedUID
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func bestPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "LeaderboardVC") as! LeaderboardVC
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -388,13 +437,8 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
                 
                 self.followButton.image = UIImage(named: "followingProfile")
                 self.showStats()
-            }
-            
-        })
-        
-        if isFollower == false {
-            
-            if let imgData = UIImageJPEGRepresentation(currentUserProPic, 0.2) {
+
+            if let imgData = UIImageJPEGRepresentation(self.currentUserProPic, 0.2) {
                 
                 let imgUid = NSUUID().uuidString
                 let metadata = FIRStorageMetadata()
@@ -411,14 +455,21 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
                         }
                     }
                 }
+                }
             }
-        }
+        })
+        
+        
         
         ref.removeAllObservers()
         
     }
-    
-    
+}
+
+extension FriendProfileVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
 }
 
 

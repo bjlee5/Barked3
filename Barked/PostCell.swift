@@ -11,6 +11,7 @@ import Firebase
 import Foundation
 import AudioToolbox
 import UserNotifications
+import SDWebImage
 
 protocol CellSubclassDelegate: class {
     func buttonTapped(cell: PostCell)
@@ -31,6 +32,8 @@ class PostCell: UITableViewCell {
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var currentUsername: String!
     var currentUserPic: UIImage!
+    var postKey: String = ""
+    var selectedUID: String = ""
     
     @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var profilePic: BoarderedCircleImage!
@@ -89,7 +92,8 @@ class PostCell: UITableViewCell {
             print(error.localizedDescription)
         }
     }
-    //
+    
+    // MARK: Configure Cell
     
     func configureCell(post: Post, img: UIImage? = nil) {
         
@@ -104,13 +108,14 @@ class PostCell: UITableViewCell {
         self.postText.text = post.caption
         self.likesNumber.text = "\(post.likes)"
         self.dateLabel.text = post.currentDate
+        self.postKey = post.postKey
+        self.selectedUID = post.uid
         
         let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
         userRef.observe(.value, with: { (snapshot) in
             self.postUser.text = "\(post.postUser)"
             self.username.text = "\(post.postUser)"
         })
-
         
         if img != nil {
             self.postPic.image = img
@@ -122,17 +127,17 @@ class PostCell: UITableViewCell {
                 } else {
                     print("Image downloaded successfully")
                     if let imgData = data {
+                        
                         if let img = UIImage(data: imgData) {
                             self.postPic.image = img
                             FeedVC.imageCache.setObject(img, forKey: post.imageURL as NSString!)
                         }
                     }
-                    
-                    
                 }
             })
         }
         
+
         let otherRef = FIRStorage.storage().reference(forURL: post.profilePicURL)
         otherRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (imgData, error) in
             if error == nil {
@@ -174,17 +179,18 @@ class PostCell: UITableViewCell {
         })
     }
     
+    // MARK: Notifications Methods
+    
     func scheduleNotifications() {
         
         userRef.observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
-            let notifyingUser = String(user.username)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
             var badge = 0
             badge += 1
-            content.body = "\(self.currentUsername) liked your photo!"
+            content.body = "\(self.currentUsername!) liked your photo!"
             content.sound = UNNotificationSound.default()
             content.badge = badge as NSNumber
             
@@ -211,9 +217,9 @@ class PostCell: UITableViewCell {
         return result
     }
     
-    
     func likeNotification(imgURL: String) {
         loadUserInfo()
+        scheduleNotifications()
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [
@@ -222,7 +228,9 @@ class PostCell: UITableViewCell {
             "read": false,
             "uid": uid!,
             "username": "\(currentUsername!)",
-            "currentDate": formatDate()
+            "currentDate": formatDate(),
+            "identifier": "\(postKey)",
+            "type": notificationType.like.rawValue
         ]
         
         let firebaseNotify = DataService.ds.REF_USERS.child(self.post.uid).child("notifications").childByAutoId()
@@ -231,8 +239,6 @@ class PostCell: UITableViewCell {
     }
     
     func downloadLikingUserPhoto() {
-        
-        scheduleNotifications()
         
         guard let proImg = currentUserPic else {
             print("BRIAN: The user has no profile pic!")
@@ -259,6 +265,8 @@ class PostCell: UITableViewCell {
             }
         }
     }
+    
+    // MARK: Actions
     
     @IBAction func userPressed(_ sender: Any) {
     self.delegate?.buttonTapped(cell: self)

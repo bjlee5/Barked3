@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B11EA6F81BE1E1AA1094CEDD29BD52A1"
+               BlueprintIdentifier = "7B1894CEEB245517CB1D7FC34EF5F62C"
                BuildableName = "Pods_Barked.framework"
                BlueprintName = "Pods-Barked"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B11EA6F81BE1E1AA1094CEDD29BD52A1"
+            BlueprintIdentifier = "7B1894CEEB245517CB1D7FC34EF5F62C"
             BuildableName = "Pods_Barked.framework"
             BlueprintName = "Pods-Barked"
             ReferencedContainer = "container:Pods.xcodeproj">

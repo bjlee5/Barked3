@@ -11,7 +11,7 @@ import Firebase
 import SwiftKeychainWrapper
 import Foundation
 import UserNotifications
-
+import SDWebImage
 
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CellSubclassDelegate, CommentsSubclassDelegate {
     
@@ -44,7 +44,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         super.viewDidLoad()
         
         checkNotificationsRead()
-        self.tabBarController?.tabBar.items?[3].badgeValue = String(NOTE_BADGE_NUMBER)
         self.posts.sort(by: self.sortDatesFor)
         followingFriends()
         loadUserInfo()
@@ -58,10 +57,11 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        NOTE_BADGE_NUMBER = 0
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        checkNotificationsRead()
     }
+    
     
     // MARK: - Activity Indicator
     
@@ -182,7 +182,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func fetchPosts() {
-        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+        DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
             self.posts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
                 for snap in snapshot {
@@ -257,6 +257,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             } else {
                 cell.bestShowPic.isHidden = true
             }
+            
+            cell.postPic.sd_setImage(with: URL(string: post.imageURL))
             
             if let img = FeedVC.imageCache.object(forKey: post.imageURL as NSString!) {
                                 cell.configureCell(post: post, img: img)
@@ -364,7 +366,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                             if let postUser = postDict["read"] as? Bool {
                                 print("DYEUCK: \(postUser)")
                                 if postUser == false {
-                                NOTE_BADGE_NUMBER += 1
+                                self.tabBarController?.tabBar.items?[3].badgeValue = "1"
                             }
                         }
                     }

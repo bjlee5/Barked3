@@ -68,6 +68,9 @@ PODS:
   - IQKeyboardManagerSwift (4.0.7)
   - SCLAlertView (0.7.0)
   - SCLAlertView-Objective-C (1.0.6)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
   - SwiftKeychainWrapper (3.0.1)
 
 DEPENDENCIES:
@@ -80,6 +83,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - SCLAlertView
   - SCLAlertView-Objective-C
+  - SDWebImage (~> 4.0)
   - SwiftKeychainWrapper (from `https://github.com/jrendel/SwiftKeychainWrapper.git`, branch `master`)
 
 EXTERNAL SOURCES:
@@ -111,8 +115,9 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SCLAlertView-Objective-C: ca78280817e66e74366b78579350dee2ff277e23
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   SwiftKeychainWrapper: e353c2d5ac22e72ff7c1dc3b1de1f0e7341ba030
 
-PODFILE CHECKSUM: c81251f6a3577a0bc2d7c023b761863f9e723df7
+PODFILE CHECKSUM: d281b71c6886af90dfa7f5110e98bdbd5bb00611
 
 COCOAPODS: 1.2.1

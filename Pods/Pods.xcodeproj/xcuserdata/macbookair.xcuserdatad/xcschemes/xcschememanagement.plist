@@ -49,6 +49,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftKeychainWrapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,16 +62,6 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>101752124AC6D91792C3F7730DB20075</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>143B91BA939B1EAD96ED224355DDA4A5</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>44CAD6CE523055ED339E87154473A254</key>
 		<dict>
 			<key>primary</key>
@@ -82,7 +77,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B11EA6F81BE1E1AA1094CEDD29BD52A1</key>
+		<key>70DB284372A461019CC3D718AB285FB3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7B1894CEEB245517CB1D7FC34EF5F62C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>855F32BE7AE16A6277635D556FE30FDE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>90E5EB56298DE78FEA5DAD0F7A46EB81</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B0A68FE0DF9089D61F99F6F45A29B375</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -98,11 +113,6 @@
 			<true/>
 		</dict>
 		<key>C052BEBFBD0AB5218CC64BA3450F6547</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F7C71DDF5E72D3D2490F7650442322CE</key>
 		<dict>
 			<key>primary</key>
 			<true/>

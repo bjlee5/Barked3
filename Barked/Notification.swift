@@ -9,6 +9,12 @@
 import Foundation
 import Firebase
 
+enum notificationType: String {
+    case comment = "comment"
+    case like = "like"
+    case follow = "follow"
+}
+
 class Notification {
     private var _comment: String!
     private var _photoURL: String!
@@ -16,6 +22,8 @@ class Notification {
     private var _uid: String!
     private var _username: String!
     private var _currentDate: String!
+    private var _identifier: String!
+    private var _type: String!
     private var _notificationRef: FIRDatabaseReference!
     private var _notificationKey: String!
     
@@ -44,17 +52,27 @@ class Notification {
         return _currentDate
     }
     
+    var identifier: String {
+        return _identifier
+    }
+    
+    var type: String {
+        return _type
+    }
+    
     var notificationKey: String {
         return _notificationKey
     }
     
-    init(comment: String, photoURL: String, read: Bool, uid: String, username: String, currentDate: String, notificationKey: String) {
+    init(comment: String, photoURL: String, read: Bool, uid: String, username: String, currentDate: String, identifier: String, type: String, notificationKey: String) {
         self._comment = comment
         self._photoURL = photoURL
         self._read = read
         self._uid = uid
         self._username = username
         self._currentDate = currentDate
+        self._identifier = identifier
+        self._type = type
         self._notificationKey = notificationKey 
     }
     
@@ -83,6 +101,14 @@ class Notification {
         
         if let currentDate = noteData["currentDate"] as? String {
             self._currentDate = currentDate 
+        }
+        
+        if let identifer = noteData["identifier"] as? String {
+            self._identifier = identifer
+        }
+        
+        if let type = noteData["type"] as? String {
+            self._type = type
         }
         
         _notificationRef = DataService.ds.REF_CURRENT_USERS.child("notifications").child(_notificationKey).child("read")

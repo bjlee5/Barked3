@@ -25,6 +25,7 @@ class DeletePostCell: UITableViewCell {
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var currentUsername: String!
     var currentUserPic: UIImage!
+    var postKey: String = ""
     
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var postLikes: UILabel!
@@ -75,6 +76,7 @@ class DeletePostCell: UITableViewCell {
         self.postCaption.text = post.caption
         self.postLikes.text = "\(post.likes)"
         self.postDate.text = post.currentDate
+        self.postKey = post.postKey
         
         let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
         userRef.observe(.value, with: { (snapshot) in
@@ -107,9 +109,8 @@ class DeletePostCell: UITableViewCell {
     func likesTapped(sender: UIGestureRecognizer) {
         loadUserInfo()
         if post.uid == FIRAuth.auth()?.currentUser?.uid {
-            scheduleNotifications()
         } else {
-            print("WOOBLES - Dog, this is your post...")
+            // Do nothing
         }
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
@@ -165,6 +166,8 @@ class DeletePostCell: UITableViewCell {
     
     
     func likeNotification(imgURL: String) {
+        
+        scheduleNotifications()
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [
@@ -173,7 +176,9 @@ class DeletePostCell: UITableViewCell {
             "read": false,
             "uid": uid!,
             "username": "\(currentUsername!)",
-            "currentDate": formatDate()
+            "currentDate": formatDate(),
+            "identifier": "\(postKey)",
+            "type": notificationType.like.rawValue
         ]
         
         let firebaseNotify = DataService.ds.REF_USERS.child(self.post.uid).child("notifications").childByAutoId()
@@ -230,9 +235,4 @@ class DeletePostCell: UITableViewCell {
     }
 }
 
-extension FriendProfileVC: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
-    }
-}
 

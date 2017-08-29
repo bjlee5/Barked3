@@ -17,6 +17,8 @@ class FriendPostVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var storageRef: FIRStorage {
         return FIRStorage.storage()
     }
+    var postKey: String = ""
+    var selectedUID: String = ""
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

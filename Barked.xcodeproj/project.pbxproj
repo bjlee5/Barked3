@@ -8,7 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		12889C423F1EA1C1FAC810B2 /* Pods_Barked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A9856708826CBC51FE045D /* Pods_Barked.framework */; };
-		D001B4261EE860750007020D /* FriendPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D001B4251EE860750007020D /* FriendPost.swift */; };
+		D001B4261EE860750007020D /* FriendPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D001B4251EE860750007020D /* FriendPostVC.swift */; };
+		D004F7811F4FFAB800523C29 /* LeaderboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004F7801F4FFAB800523C29 /* LeaderboardCell.swift */; };
+		D004F7831F4FFAF000523C29 /* LeaderboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004F7821F4FFAF000523C29 /* LeaderboardVC.swift */; };
+		D004F7851F50224300523C29 /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004F7841F50224300523C29 /* Leaderboard.swift */; };
 		D029CA801EB27D60009788CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029CA7F1EB27D60009788CE /* AppDelegate.swift */; };
 		D029CA821EB27D60009788CE /* LogInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029CA811EB27D60009788CE /* LogInVC.swift */; };
 		D029CA851EB27D60009788CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D029CA831EB27D60009788CE /* Main.storyboard */; };
@@ -67,8 +70,12 @@
 		0A582F45E4291ABEE3F57805 /* Pods-Barked.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barked.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Barked/Pods-Barked.debug.xcconfig"; sourceTree = "<group>"; };
 		52A9856708826CBC51FE045D /* Pods_Barked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Barked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C43E48463F2B0F89ECB9497A /* Pods-Barked.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Barked.release.xcconfig"; path = "Pods/Target Support Files/Pods-Barked/Pods-Barked.release.xcconfig"; sourceTree = "<group>"; };
-		D001B4251EE860750007020D /* FriendPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendPost.swift; sourceTree = "<group>"; };
+		D00176691F54187F00A79E12 /* Barked-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Barked-Bridging-Header.h"; sourceTree = "<group>"; };
+		D001B4251EE860750007020D /* FriendPostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendPostVC.swift; sourceTree = "<group>"; };
 		D001B4271EE882BA0007020D /* Barked.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Barked.entitlements; sourceTree = "<group>"; };
+		D004F7801F4FFAB800523C29 /* LeaderboardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderboardCell.swift; sourceTree = "<group>"; };
+		D004F7821F4FFAF000523C29 /* LeaderboardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderboardVC.swift; sourceTree = "<group>"; };
+		D004F7841F50224300523C29 /* Leaderboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		D029CA7C1EB27D60009788CE /* Barked.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barked.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D029CA7F1EB27D60009788CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D029CA811EB27D60009788CE /* LogInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInVC.swift; sourceTree = "<group>"; };
@@ -208,6 +215,7 @@
 				D075DB0C1EBC9AB00099292E /* DeletePostCell.swift */,
 				D0BEC92B1EE71854000181DA /* CommentsCell.swift */,
 				D0FFA9281F32352900C6BDC1 /* NotificationCell.swift */,
+				D004F7801F4FFAB800523C29 /* LeaderboardCell.swift */,
 			);
 			name = "TableView Cells";
 			sourceTree = "<group>";
@@ -221,6 +229,7 @@
 				D0790AB21ED8CB9100684667 /* Breeds.swift */,
 				D0BEC9291EE71805000181DA /* Comment.swift */,
 				D0FFA9261F3227E900C6BDC1 /* Notification.swift */,
+				D004F7841F50224300523C29 /* Leaderboard.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -252,7 +261,7 @@
 				D075DB101EBCC3F50099292E /* FriendProfileVC.swift */,
 				D0E210921EB40E5000067DA9 /* MyProfileVC.swift */,
 				D075DB0A1EBB5FFB0099292E /* DeletePostVC.swift */,
-				D001B4251EE860750007020D /* FriendPost.swift */,
+				D001B4251EE860750007020D /* FriendPostVC.swift */,
 				D0E210941EB40E6300067DA9 /* EditProfileVC.swift */,
 				D0E210981EB40EA000067DA9 /* ForgotPasswordVC.swift */,
 				D07CB60B1F22612E00034CB8 /* MyFollowingVC.swift */,
@@ -261,6 +270,8 @@
 				D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */,
 				D047E4061F3018C2007814D4 /* BestInShowVC.swift */,
 				D047E4081F30C21E007814D4 /* NotificationsVC.swift */,
+				D004F7821F4FFAF000523C29 /* LeaderboardVC.swift */,
+				D00176691F54187F00A79E12 /* Barked-Bridging-Header.h */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -317,7 +328,7 @@
 				TargetAttributes = {
 					D029CA7B1EB27D60009788CE = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 6225SLKFTH;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -430,7 +441,7 @@
 				D0E210AB1EB40FBF00067DA9 /* Post.swift in Sources */,
 				D0E2108D1EB40E2500067DA9 /* FeedVC.swift in Sources */,
 				D075DB111EBCC3F50099292E /* FriendProfileVC.swift in Sources */,
-				D001B4261EE860750007020D /* FriendPost.swift in Sources */,
+				D001B4261EE860750007020D /* FriendPostVC.swift in Sources */,
 				D075DB0D1EBC9AB00099292E /* DeletePostCell.swift in Sources */,
 				D029CA821EB27D60009788CE /* LogInVC.swift in Sources */,
 				D047E4091F30C21E007814D4 /* NotificationsVC.swift in Sources */,
@@ -446,6 +457,7 @@
 				D0E210A71EB40FAD00067DA9 /* User.swift in Sources */,
 				D0536CC21EF3099900DFFE94 /* BoarderedView.swift in Sources */,
 				D0E210951EB40E6300067DA9 /* EditProfileVC.swift in Sources */,
+				D004F7811F4FFAB800523C29 /* LeaderboardCell.swift in Sources */,
 				D0E2109F1EB40F1B00067DA9 /* PostCell.swift in Sources */,
 				D0BEC92C1EE71854000181DA /* CommentsCell.swift in Sources */,
 				D0E210971EB40E6F00067DA9 /* FriendsVC.swift in Sources */,
@@ -455,12 +467,14 @@
 				D0E210A51EB40F7000067DA9 /* SexyView.swift in Sources */,
 				D0E210A11EB40F5200067DA9 /* ProfileCell.swift in Sources */,
 				D0E210A91EB40FB400067DA9 /* Friend.swift in Sources */,
+				D004F7851F50224300523C29 /* Leaderboard.swift in Sources */,
 				D0FFA9271F3227E900C6BDC1 /* Notification.swift in Sources */,
 				D0FFA9291F32352900C6BDC1 /* NotificationCell.swift in Sources */,
 				D0BEC92A1EE71805000181DA /* Comment.swift in Sources */,
 				D075DAE21EB79E880099292E /* PostVC.swift in Sources */,
 				D047E4071F3018C2007814D4 /* BestInShowVC.swift in Sources */,
 				D0E210AD1EB40FD100067DA9 /* Constants.swift in Sources */,
+				D004F7831F4FFAF000523C29 /* LeaderboardVC.swift in Sources */,
 				D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */,
 				D07CB60C1F22612F00034CB8 /* MyFollowingVC.swift in Sources */,
 				D075DAED1EB8C2F40099292E /* SexyField.swift in Sources */,
@@ -594,15 +608,18 @@
 			baseConfigurationReference = 0A582F45E4291ABEE3F57805 /* Pods-Barked.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 6225SLKFTH;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Barked/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lionseye.Barked;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Barked/Barked-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -613,15 +630,17 @@
 			baseConfigurationReference = C43E48463F2B0F89ECB9497A /* Pods-Barked.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 6225SLKFTH;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Barked/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lionseye.Barked;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Barked/Barked-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

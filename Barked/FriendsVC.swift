@@ -21,6 +21,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     var storageRef: FIRStorage { return FIRStorage.storage() }
     var currentUsername: String!
     var currentUserPic: UIImage!
+    var currentUID: String = ""
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -76,6 +77,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             let user = Users(snapshot: snapshot)
             let imageURL = user.photoURL!
             self.currentUsername = user.username
+            self.currentUID = user.uid
             
             /// We are downloading the current user's ImageURL then converting it using "data" to the UIImage which takes a property of data
             self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
@@ -104,7 +106,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             print("WOOBLES - Schedule notification is run!!!")
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
-            content.body = "\(notifyingUser!) is now following you!"
+            content.body = "\(self.currentUsername!) is now following you!"
             content.sound = UNNotificationSound.default()
             content.badge = NOTE_BADGE_NUMBER as! NSNumber
             
@@ -123,6 +125,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     
     /// Path to Users profile
     func profileBtnTapped(cell: UserCell) {
+        var isFollower = false
         guard let indexPath = self.friendsTableView.indexPath(for: cell) else { return }
         
         //  Do whatever you need to do with the indexPath
@@ -149,9 +152,9 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     
     /// Follows or Unfollows a user
     func buttonTapped(cell: UserCell) {
+        var isFollower = false
         self.playSound()
         self.soundEffect()
-        var isFollower = false
         
         guard let indexPath = friendsTableView.indexPath(for: cell) else {
             print("BRIAN: An error is occuring here")
@@ -192,7 +195,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             
             if isFollower == false {
                 if clickedUser != FIRAuth.auth()?.currentUser?.uid {
-                self.scheduleNotifications()
                 }
                 let following = ["following/\(key)" : clickedUser]
                 let followers = ["followers/\(key)" : uid]
@@ -200,16 +202,14 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
                 ref.child("users").child(uid).updateChildValues(following)
                 ref.child("users").child(clickedUser).updateChildValues(followers)
                 
-                
+                isFollower = true
                 cell.followButton.image = UIImage(named: "following")
                 
-            }
-            
-        })
+
         
-        if isFollower == false {
-            
-            if let imgData = UIImageJPEGRepresentation(currentUserPic, 0.2) {
+//        if isFollower == false {
+        
+            if let imgData = UIImageJPEGRepresentation(self.currentUserPic, 0.2) {
                 
                 let imgUid = NSUUID().uuidString
                 let metadata = FIRStorageMetadata()
@@ -228,11 +228,13 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
                 }
             }
         }
-        
+    })
+    
+    
         
         ref.removeAllObservers()
         
-    }
+}
     
     /// Helper method to segue to FriendProfileVC
     func checkSelectedUID() {
@@ -294,6 +296,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     /// Notification for Following User 
     func followingNotification(imgURL: String, selectedPostUID: String) {
         
+        self.scheduleNotifications()
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [
@@ -302,14 +305,15 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             "read": false,
             "uid": uid!,
             "username": "\(currentUsername!)",
-            "currentDate": formatDate()
+            "currentDate": formatDate(),
+            "identifier": "\(currentUID)",
+            "type": notificationType.follow.rawValue
         ]
         
-        scheduleNotifications()
         let firebaseNotify = DataService.ds.REF_USERS.child(selectedPostUID).child("notifications").childByAutoId()
         firebaseNotify.setValue(notification)
     }
-    
+
     // MARK: TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -333,8 +337,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         
         if let cell = friendsTableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserCell {
             cell.userDelegate = self
-            cell.profileDelegate = self 
-            cell.backgroundColor = UIColor.clear
+            cell.profileDelegate = self
             cell.configure(friend: someFriend, indexPath: someUID!)
             cell.checkFollowing(indexPath: someUID!)
             return cell
@@ -347,8 +350,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         // Nothing
     }
 
-    
-    
     @IBAction func backBtn(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -370,8 +371,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     func playSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
-    
-    
 }
 
 extension UIImageView {

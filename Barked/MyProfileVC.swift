@@ -317,6 +317,13 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditProfileVC")
         self.present(vc, animated: true, completion: nil)
     }
+    
+    @IBAction func bestPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "LeaderboardVC") as! LeaderboardVC
+        self.present(vc, animated: true, completion: nil)
+    }
+    
 
     
     @IBAction func followingBtn(_ sender: Any) {

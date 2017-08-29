@@ -11,6 +11,8 @@ import Firebase
 
 class NotificationCell: UITableViewCell {
 
+    var notification: Notification!
+    
     @IBOutlet weak var userImage: BoarderedCircleImage!
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var unreadImage: UIImageView!
@@ -19,6 +21,12 @@ class NotificationCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+    }
+    
+    func configure(notification: Notification) {
+        
+        self.notification = notification
+        
     }
 
 }

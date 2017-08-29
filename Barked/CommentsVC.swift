@@ -57,14 +57,14 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Notifications
     
-    func scheduleNotifications(username: String) {
+    func scheduleNotifications() {
         userRef.observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
             let notifyingUser = String(user.username)
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
                 let content = UNMutableNotificationContent()
-                content.body = "\(username) commented on your photo!"
+                content.body = "\(self.currentUsername.text!) commented on your photo!"
                 content.sound = UNNotificationSound.default()
                 content.badge = NOTE_BADGE_NUMBER as! NSNumber
                 
@@ -93,6 +93,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func commentNotification(imgURL: String) {
         
+            scheduleNotifications()
             let uid = FIRAuth.auth()?.currentUser?.uid
         
             let notification: Dictionary<String, Any> = [
@@ -101,9 +102,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 "read": false,
                 "uid": uid!,
                 "username": "\(self.currentUsername.text!)",
-                "currentDate": formatDate()
+                "currentDate": formatDate(),
+                "identifier": selectedPost.postKey,
+                "type": notificationType.comment.rawValue
                 ]
-        scheduleNotifications(username: "\(currentUsername)")
+        
         let firebaseNotify = DataService.ds.REF_USERS.child(self.selectedPost.uid).child("notifications").childByAutoId()
         firebaseNotify.setValue(notification)
     }
