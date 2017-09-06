@@ -129,32 +129,10 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             }
             self.emailField.text = user.email
             self.breedField.text = user.breed
-            let imageURL = user.photoURL!
-            
-            // Clean up profilePic is storage - model after the post-pic, which is creating a folder in storage. This is too messy right now.
-            
-            self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-                
-                if error == nil {
-                    
-                    DispatchQueue.main.async {
-                        if let data = imgData {
-                            self.profilePic.image = UIImage(data: data)
-                        }
-                    }
-                    
-                    
-                } else {
-                    print(error!.localizedDescription)
-                    
-                }
+            self.profilePic.sd_setImage(with: URL(string: user.photoURL))
                 
             })
-            
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+
         
     }
     
@@ -177,8 +155,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         present(imagePicker, animated: true, completion: nil)
     }
     
-
-
     @IBAction func updateProfile(_ sender: Any) {
         let user = FIRAuth.auth()?.currentUser
         

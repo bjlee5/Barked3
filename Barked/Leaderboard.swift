@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class Leaderboard: NSObject {
     
@@ -15,4 +16,10 @@ class Leaderboard: NSObject {
     var breed: String!
     var rank: Int!
     var imagePath: String!
+    var userRef: FIRDatabaseReference! = DataService.ds.REF_USERS
+
+    func increaseRank(by amount: Int) {
+        rank = amount
+    userRef.child(userID).child("rank").setValue(rank)
+    }
 }

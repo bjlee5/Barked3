@@ -112,30 +112,8 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             self.usernameLabel.text = user.name
             }
             self.breed.text = user.breed
-            let imageURL = user.photoURL!
-            
-            self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-                
-                if error == nil {
-                    
-                    DispatchQueue.main.async {
-                        if let data = imgData {
-                            self.proPic.image = UIImage(data: data)
-                        }
-                    }
-                    
-                    
-                } else {
-                    print(error!.localizedDescription)
-                    
-                }
-                
-            })
-            
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+            self.proPic.sd_setImage(with: URL(string: user.photoURL))
+        })
     }
     
     /// Sort Feed of Posts by Current Date

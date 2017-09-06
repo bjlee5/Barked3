@@ -80,18 +80,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             } else {
                 cell.unreadImage.isHidden = true
         }
+        cell.userImage.sd_setImage(with: URL(string: notifications[indexPath.row].photoURL))
         
-        FIRStorage.storage().reference(forURL: notifications[indexPath.row].photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        cell.userImage.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
         return cell
     }
     

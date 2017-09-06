@@ -16,8 +16,10 @@ class LeaderboardCell: UITableViewCell {
     var leader: Leaderboard!
     let uid = FIRAuth.auth()!.currentUser!.uid
     let ref = FIRDatabase.database().reference()
+    var bestInShowDict = [Post]()
     
-    @IBOutlet weak var profileImage: UIImageView!
+
+    @IBOutlet weak var profileImage: BoarderedCircleImage!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var userBreed: UILabel!
     @IBOutlet weak var bestInShowCount: UILabel!
@@ -27,40 +29,15 @@ class LeaderboardCell: UITableViewCell {
         self.leader = leader
         self.usernameLabel.text = leader.username
         self.userBreed.text = leader.breed
-        profileImage.downloadImage(from: leader.imagePath!)
+        self.bestInShowCount.text = "\(leader.rank!)"
         
-        if leader.rank == nil {
-            self.bestInShowCount.text = "\(0)"
-        } else {
-        self.bestInShowCount.text = "\(leader.rank)"
-    }
+        profileImage.sd_setImage(with: URL(string: leader.imagePath))
         
-        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
-            var bestInShowDict = [Post]()
-            bestInShowDict = []
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                print("LEE: \(snapshot)")
-                for snap in snapshot {
-                    
-                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        if let postUser = postDict["uid"] as? String {
-                            if postUser == indexPath {
-                                if let bestInShow = postDict["bestInShow"] as? Bool {
-                                    if bestInShow == true {
-                                        
-                                        let bestKey = snap.key
-                                        let bestPost = Post(postKey: bestKey, postData: postDict)
-                                        bestInShowDict.append(bestPost)
-                                        leader.rank = bestInShowDict.count
-                                        self.bestInShowCount.text = "\(bestInShowDict.count)"
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        })
     }
+    
+//    func configureRank() {
+//        let rankAmount = self.bestInShowDict.count
+//        leader.increaseRank(by: rankAmount)
+//        self.bestInShowCount.text = "\(leader.rank)"
+//    }
 }

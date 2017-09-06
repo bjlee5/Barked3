@@ -308,12 +308,10 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             } else {
                 cell.bestShowPic.isHidden = true
             }
+            cell.profilePic.sd_setImage(with: URL(string: post.profilePicURL))
+            cell.postPic.sd_setImage(with: URL(string: post.imageURL))
+            cell.configureCell(post: post)
             
-            if let img = FeedVC.imageCache.object(forKey: post.imageURL as NSString!) {
-                cell.configureCell(post: post, img: img)
-            } else {
-                cell.configureCell(post: post)
-            }
             
             return cell
         } else {
@@ -395,8 +393,8 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     // MARK: - Actions
     
-    @IBAction func profileBtn(_ sender: Any) {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
+    @IBAction func listBtnPress(_ sender: Any) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LeaderboardVC")
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -419,26 +417,6 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
 }
 
-//    @IBAction func segmentedPress(_ sender: Any) {
-//        tableView.reloadData()
-//        switch(self.segmentedController.selectedSegmentIndex) {
-//        case 0:
-//            codedLabel.isHidden = true
-//            if posts.count <= 0 {
-//                stopIndicator()
-//                otherLabel.isHidden = false }
-//            
-//        case 1:
-//            if testPosts.count <= 0 {
-//                stopIndicator()
-//                codedLabel.isHidden = false }
-//            otherLabel.isHidden = true
-//        default:
-//            codedLabel.isHidden = true
-//            otherLabel.isHidden = true
-//        }
-//    }
-//}
 
 extension BestInShowVC: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

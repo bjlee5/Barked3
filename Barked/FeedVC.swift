@@ -19,6 +19,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     var posts = [Post]()
     var testPosts = [Post]()
+    var users = [Friend]()
+    var bestInShowDict = [Post]()
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var storageRef: FIRStorage { return FIRStorage.storage() }
     var profilePicLoaded = false 
@@ -43,6 +45,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        retrieveUser()
         checkNotificationsRead()
         self.posts.sort(by: self.sortDatesFor)
         followingFriends()
@@ -54,6 +57,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         
         profilePic.isHidden = true
         currentUser.isHidden = true
+        
+        // Observer to Update "Likes" in Realtime
+        tableView.reloadData()
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.tableView.reloadData()
+        })
         
     }
     
@@ -207,6 +216,66 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                 self.posts.sort(by: self.sortDatesFor)
             }
         })
+    }
+    
+    
+    /// Creating value for "Rank" - number of "Best-In-Shows" each user was been awarded
+    func updateRank() {
+        for user in users {
+        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+            self.bestInShowDict = []
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                print("LEE: \(snapshot)")
+                for snap in snapshot {
+                    
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["uid"] as? String {
+                            if postUser == user.userID {
+                                print("LEEZUS - comparing the post User \(postUser) and \(user.userID)")
+                                if let bestInShow = postDict["bestInShow"] as? Bool {
+                                    if bestInShow == true {
+                                        
+                                        let bestKey = snap.key
+                                        let bestPost = Post(postKey: bestKey, postData: postDict)
+                                        self.bestInShowDict.append(bestPost)
+                                        let rank = self.bestInShowDict.count
+                                        DataService.ds.REF_USERS.child(user.userID).child("rank").setValue(rank)
+                                        print("LEEZUS: Ranks have been updated")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    func retrieveUser() {
+        let ref = FIRDatabase.database().reference()
+        ref.child("users").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+            
+            let users = snapshot.value as! [String: AnyObject]
+            self.users.removeAll()
+            for (_, value) in users {
+                if let uid = value["uid"] as? String {
+                    if uid != FIRAuth.auth()!.currentUser!.uid {
+                        let userToShow = Friend()
+                        if let username = value["username"] as? String {
+                            
+                            userToShow.username = username
+                            userToShow.userID = uid
+                            self.users.append(userToShow)
+                            self.updateRank()
+                        }
+                    }
+                }
+            }
+
+        })
+        
+        ref.removeAllObservers()
         
     }
     
@@ -259,13 +328,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             }
             
             cell.postPic.sd_setImage(with: URL(string: post.imageURL))
+            cell.profilePic.sd_setImage(with: URL(string: post.profilePicURL))
             
-            if let img = FeedVC.imageCache.object(forKey: post.imageURL as NSString!) {
-                                cell.configureCell(post: post, img: img)
-                            } else {
-                            cell.configureCell(post: post)
-                        }
+//            if let img = FeedVC.imageCache.object(forKey: post.imageURL as NSString!) {
+//                                cell.configureCell(post: post, img: img)
+//                            } else {
+//                
+//            }
             
+            cell.configureCell(post: post)
             self.bestInShow()
             self.worstInShow()
             

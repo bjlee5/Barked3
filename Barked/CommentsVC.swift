@@ -86,7 +86,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func formatDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let result = formatter.string(from: date)
         return result
     }
@@ -151,18 +151,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func loadMyComment() {
         myUsername.text = selectedPost.postUser
         myComment.text = selectedPost.caption
-        
-        self.storageRef.reference(forURL: selectedPost.profilePicURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        self.myPic.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
+        myPic.sd_setImage(with: URL(string: selectedPost.profilePicURL))
     }
     
     func loadUserInfo() {
@@ -244,21 +233,23 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         cell.usernameField.numberOfLines = 0
         cell.commentField.text = comments[indexPath.row].caption
         cell.commentDate.text = comments[indexPath.row].currentDate
+        cell.profilePicImage.sd_setImage(with: URL(string: comments[indexPath.row].profilePicURL))
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
 
         
-        FIRStorage.storage().reference(forURL: comments[indexPath.row].profilePicURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        cell.profilePicImage.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
+//        FIRStorage.storage().reference(forURL: comments[indexPath.row].profilePicURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+//            if error == nil {
+//                DispatchQueue.main.async {
+//                    if let data = imgData {
+//                        cell.profilePicImage.image = UIImage(data: data)
+//                    }
+//                }
+//            } else {
+//                print(error!.localizedDescription)
+//            }
+//        })
+        
         return cell
     }
     

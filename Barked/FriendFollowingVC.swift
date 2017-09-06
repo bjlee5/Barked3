@@ -182,7 +182,7 @@ class FriendFollowingVC: UIViewController, UITableViewDelegate, UITableViewDataS
             cell.profileDelegate = self 
             cell.userName.text = friend.username
             cell.userID = friend.userID
-            cell.userImage.downloadImage(from: friend.imagePath!)
+            cell.userImage.sd_setImage(with: URL(string: friend.imagePath))
             cell.backgroundColor = UIColor.clear
             cell.checkFollowing(indexPath: friend.userID)
             return cell

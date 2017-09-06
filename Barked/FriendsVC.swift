@@ -49,7 +49,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         definesPresentationContext = true
         friendsTableView.tableHeaderView = searchController.searchBar
         
-        
 //        //Styling for background view
 //        friendsTableView.backgroundView = UIImageView(image: UIImage(named: "FFBackground"))
     }
@@ -140,7 +139,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
             self.selectedUID = clickedUser!
             self.checkSelectedUID()
 //        })
-    }
+        }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "FriendProfileVC" {
@@ -208,7 +207,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
 
         
 //        if isFollower == false {
-        
+                
             if let imgData = UIImageJPEGRepresentation(self.currentUserPic, 0.2) {
                 
                 let imgUid = NSUUID().uuidString
@@ -288,7 +287,7 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     func formatDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let result = formatter.string(from: date)
         return result
     }
@@ -322,7 +321,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         }
         return users.count
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
@@ -404,7 +402,6 @@ extension UIImageView {
         UIGraphicsEndImageContext()
         return scaledImage!
     }
-    
 }
 
 extension FriendsVC: UISearchResultsUpdating {

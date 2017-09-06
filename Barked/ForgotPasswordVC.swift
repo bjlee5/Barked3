@@ -30,6 +30,8 @@ class ForgotPasswordVC: UIViewController {
         self.forgotPW.setBackgroundColor(color: UIColor.white, forState: .selected)
         self.forgotPW.setTitleColor(UIColor.purple, for: .selected)
         
+        emailField.backgroundColor = UIColor.clear
+        
     }
     
 
@@ -45,7 +47,6 @@ class ForgotPasswordVC: UIViewController {
                 showWarningMessage("Oops!", subTitle: "Please enter a valid e-mail address")
                 print(error?.localizedDescription)
             }
-            
         })
     }
     

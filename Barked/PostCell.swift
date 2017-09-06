@@ -95,7 +95,7 @@ class PostCell: UITableViewCell {
     
     // MARK: Configure Cell
     
-    func configureCell(post: Post, img: UIImage? = nil) {
+    func configureCell(post: Post) {
         
 //        if post.bestInShow == true {
 //            bestShowPic.isHidden = false
@@ -117,40 +117,40 @@ class PostCell: UITableViewCell {
             self.username.text = "\(post.postUser)"
         })
         
-        if img != nil {
-            self.postPic.image = img
-        } else {
-            let ref = FIRStorage.storage().reference(forURL: post.imageURL)
-            ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
-                if error != nil {
-                    print("BRIAN: Unable to download image from Firebase")
-                } else {
-                    print("Image downloaded successfully")
-                    if let imgData = data {
-                        
-                        if let img = UIImage(data: imgData) {
-                            self.postPic.image = img
-                            FeedVC.imageCache.setObject(img, forKey: post.imageURL as NSString!)
-                        }
-                    }
-                }
-            })
-        }
+//        if img != nil {
+//            self.postPic.image = img
+//        } else {
+//            let ref = FIRStorage.storage().reference(forURL: post.imageURL)
+//            ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
+//                if error != nil {
+//                    print("BRIAN: Unable to download image from Firebase")
+//                } else {
+//                    print("Image downloaded successfully")
+//                    if let imgData = data {
+//                        
+//                        if let img = UIImage(data: imgData) {
+//                            self.postPic.image = img
+//                            FeedVC.imageCache.setObject(img, forKey: post.imageURL as NSString!)
+//                        }
+//                    }
+//                }
+//            })
+//        }
         
 
-        let otherRef = FIRStorage.storage().reference(forURL: post.profilePicURL)
-        otherRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        self.profilePic.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-                print("WOOBLES: BIG TIME ERRORS")
-            }
-        })
+//        let otherRef = FIRStorage.storage().reference(forURL: post.profilePicURL)
+//        otherRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (imgData, error) in
+//            if error == nil {
+//                DispatchQueue.main.async {
+//                    if let data = imgData {
+//                        self.profilePic.image = UIImage(data: data)
+//                    }
+//                }
+//            } else {
+//                print(error!.localizedDescription)
+//                print("WOOBLES: BIG TIME ERRORS")
+//            }
+//        })
     
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
@@ -212,7 +212,7 @@ class PostCell: UITableViewCell {
     func formatDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let result = formatter.string(from: date)
         return result
     }
@@ -261,7 +261,6 @@ class PostCell: UITableViewCell {
                         self.likeNotification(imgURL: url)
                     }
                 }
-            
             }
         }
     }

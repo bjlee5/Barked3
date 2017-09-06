@@ -56,8 +56,8 @@ class UserCell: UITableViewCell {
         self.friend = friend
         self.userName.text = friend.username
 //        self.followingRef = nil
-        
-        userImage.downloadImage(from: friend.imagePath!)
+
+        userImage.sd_setImage(with: URL(string: friend.imagePath))
         
         ref.child("users").child(uid).child("following").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
             if let following = snapshot.value as? [String: AnyObject] {

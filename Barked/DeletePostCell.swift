@@ -82,20 +82,9 @@ class DeletePostCell: UITableViewCell {
         userRef.observe(.value, with: { (snapshot) in
             self.postUser.text = "\(post.postUser)"
         })
+        
+        self.postImage.sd_setImage(with: URL(string: post.imageURL))
 
-        let ref = FIRStorage.storage().reference(forURL: post.imageURL)
-        ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        self.postImage.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-                print("WOOBLES: BIG TIME ERRORS")
-            }
-        })
         
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
@@ -159,7 +148,7 @@ class DeletePostCell: UITableViewCell {
     func formatDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let result = formatter.string(from: date)
         return result
     }
