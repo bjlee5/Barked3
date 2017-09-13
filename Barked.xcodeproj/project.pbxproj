@@ -328,6 +328,7 @@
 				TargetAttributes = {
 					D029CA7B1EB27D60009788CE = {
 						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = 6225SLKFTH;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -612,7 +613,7 @@
 				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6225SLKFTH;
 				INFOPLIST_FILE = Barked/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lionseye.Barked;
@@ -634,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = Barked/Barked.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6225SLKFTH;
 				INFOPLIST_FILE = Barked/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lionseye.Barked;
