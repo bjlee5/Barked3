@@ -263,13 +263,16 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
                     if uid != FIRAuth.auth()!.currentUser!.uid {
                         let userToShow = Friend()
                         if let username = value["username"] as? String {
-                            let imagePath = value["photoURL"] as? String
+                            if let imagePath = value["photoURL"] as? String {
+                                let breed = value["breed"] as? String
                             
                             userToShow.username = username
                             userToShow.imagePath = imagePath
+                            userToShow.breed = breed
                             userToShow.userID = uid
                             self.users.append(userToShow)
-    
+                            
+                            }
                         }
                     }
                 }

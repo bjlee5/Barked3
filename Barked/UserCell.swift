@@ -33,6 +33,7 @@ class UserCell: UITableViewCell {
     @IBOutlet weak var followButton: UIImageView!
     @IBOutlet weak var followBtn: UIButton!
     @IBOutlet weak var usernameBtn: UIButton!
+    @IBOutlet weak var breedLabel: UILabel!
     
     
     override func prepareForReuse() {
@@ -55,6 +56,7 @@ class UserCell: UITableViewCell {
         
         self.friend = friend
         self.userName.text = friend.username
+        self.breedLabel.text = friend.breed 
 //        self.followingRef = nil
 
         userImage.sd_setImage(with: URL(string: friend.imagePath))

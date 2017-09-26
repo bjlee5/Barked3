@@ -103,14 +103,8 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     func loadUserInfo(){
         userRef.observe(.value, with: { (snapshot) in
-            
-            
             let user = Users(snapshot: snapshot)
-            if user.name == nil {
-                self.usernameLabel.text = user.username
-            } else {
-            self.usernameLabel.text = user.name
-            }
+            self.usernameLabel.text = user.username
             self.breed.text = user.breed
             self.proPic.sd_setImage(with: URL(string: user.photoURL))
         })

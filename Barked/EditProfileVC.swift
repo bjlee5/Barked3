@@ -25,7 +25,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         return .lightContent
     }
     
-    @IBOutlet weak var nameField: UITextField! 
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var changeProBtn: UIButton!
@@ -47,7 +46,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         usernameField.backgroundColor = UIColor.clear
         emailField.backgroundColor = UIColor.clear
         breedField.backgroundColor = UIColor.clear
-        nameField.backgroundColor = UIColor.clear
         
         cancelBtn.titleLabel?.layer.shadowRadius = 3
         cancelBtn.titleLabel?.layer.shadowColor = UIColor.black.cgColor
@@ -122,11 +120,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             
             let user = Users(snapshot: snapshot)
             self.usernameField.text = user.username
-            if user.name == nil {
-                self.nameField.text = user.username
-            } else {
-                self.nameField.text = user.name
-            }
             self.emailField.text = user.email
             self.breedField.text = user.breed
             self.profilePic.sd_setImage(with: URL(string: user.photoURL))
@@ -163,11 +156,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             return
         }
         
-        guard let name = nameField.text, name != "" else {
-            showWarningMessage("Error", subTitle: "You have not entered a valid name!")
-            return
-        }
-        
         guard let email = emailField.text, email != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a valid e-mail!")
             return
@@ -198,7 +186,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
                 let changeRequest = FIRAuth.auth()?.currentUser?.profileChangeRequest()
                 changeRequest?.didChangeValue(forKey: "email")
                 changeRequest?.displayName = username
-                changeRequest?.didChangeValue(forKey: "name")
                 changeRequest?.didChangeValue(forKey: "breed")
                 
                 user?.updateEmail(email, completion: { (error) in
@@ -216,7 +203,7 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
                     if error == nil {
                         
                         let user = FIRAuth.auth()?.currentUser
-                        let userInfo = ["email": user!.email!, "username": username as Any, "name": name as Any, "breed": breed as Any, "uid": user!.uid, "photoURL": photoString!] as [String : Any]
+                        let userInfo = ["email": user!.email!, "username": username as Any, "breed": breed as Any, "uid": user!.uid, "photoURL": photoString!] as [String : Any]
                         
                         let userRef = DataService.ds.REF_USERS.child((user?.uid)!)
                         userRef.updateChildValues(userInfo)

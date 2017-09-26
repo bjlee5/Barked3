@@ -19,6 +19,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var imagePicker: UIImagePickerController!
     var imageSelected = false
     var breeds = [String]()
+    var selectedBreed: String?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -31,7 +32,6 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 //    @IBOutlet weak var profilePic: UIImageView!
 
 
-    @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
@@ -59,9 +59,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         pickerView.delegate = self
         pickerView.dataSource = self
-        pickerView.isHidden = true
-        
-        self.nameField.backgroundColor = UIColor.clear
+
         self.usernameField.backgroundColor = UIColor.clear
         self.passwordField.backgroundColor = UIColor.clear
         self.emailField.backgroundColor = UIColor.clear
@@ -94,7 +92,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        breedLabel.text = breeds[row]
+        selectedBreed = breeds[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -108,7 +106,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont(name: "SanFranciscoText-Light", size: 14)
+        label.font = UIFont(name: "SanFranciscoText-Light", size: 12)
         
         // where data is an Array of String
         label.text = breeds[row]
@@ -139,10 +137,6 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 
     @IBAction func createPress(_ sender: Any) {
     
-        guard let name = nameField.text, name != "" else {
-            showWarningMessage("Error", subTitle: "You have not entered a name!")
-            return
-        }
         guard let username = usernameField.text, username != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a username!")
             return
@@ -156,7 +150,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
             return
         }
         
-        guard let breed = breedLabel.text, breed != "" else {
+        guard let breed = selectedBreed, breed != "" else {
             showWarningMessage("Error", subTitle: "You have not entered a valid breed!")
             return
         }
@@ -176,14 +170,14 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
             } else {
                 
                 print("BRIAN: The user has been created.")
-                self.setUserInfo(user: user, email: email, password: password, username: username, name: name, breed: breed, proPic: pictureData as NSData!)
+                self.setUserInfo(user: user, email: email, password: password, username: username, breed: breed, proPic: pictureData as NSData!)
                 
             }
         })
         
     }
     
-    func setUserInfo(user: FIRUser!, email: String, password: String, username: String, name: String, breed: String, proPic: NSData!) {
+    func setUserInfo(user: FIRUser!, email: String, password: String, username: String, breed: String, proPic: NSData!) {
         
         let imgUid = NSUUID().uuidString
         let metadata = FIRStorageMetadata()
@@ -205,7 +199,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 if let url = photoURL {
                     
                     
-                    self.saveUserInfo(user: user, username: username, name: name, password: password, breed: breed, image: url)
+                    self.saveUserInfo(user: user, username: username, password: password, breed: breed, image: url)
                     
                 }
             }
@@ -215,10 +209,10 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     // This is func completeSignInID.createFIRDBuser from SocialApp1. Instead of only providing "provider": user.providerID - there is additional information provided - for the username, profile pic, etc. We need to provide a place for this information to be input. //
     
-    private func saveUserInfo(user: FIRUser!, username: String, name: String, password: String, breed: String, image: String) {
+    private func saveUserInfo(user: FIRUser!, username: String, password: String, breed: String, image: String) {
         
         
-        let userInfo = ["email": user.email!, "username": username , "name": name, "uid": user.uid , "breed": breed, "photoURL": image, "provider": user.providerID]
+        let userInfo = ["email": user.email!, "username": username , "uid": user.uid , "breed": breed, "photoURL": image, "provider": user.providerID]
         
         self.completeSignIn(id: user.uid, userData: userInfo)
         print("BRIAN: User info has been saved to the database")

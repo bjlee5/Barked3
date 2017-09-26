@@ -15,6 +15,6 @@ class Friend: NSObject {
     var userID: String!
     var username: String!
     var imagePath: String!
-    
+    var breed: String! 
 }
 
