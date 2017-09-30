@@ -40,6 +40,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBOutlet weak var breedBtn: UIButton!
     @IBOutlet weak var breedLabel: UILabel!
     @IBOutlet weak var createBtn: UIButton!
+    @IBOutlet weak var selectedPicBtn: UIButton!
 
 
     override func viewDidLoad() {
@@ -120,6 +121,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             
             selectedPic.isHidden = false
+            selectedPicBtn.isHidden = true 
             selectedPic.image = image
             imageSelected = true
         }

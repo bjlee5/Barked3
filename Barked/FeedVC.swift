@@ -178,7 +178,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                             }
                             
                             self.following.append((FIRAuth.auth()?.currentUser?.uid)!)
-                            print("BRIAN: You are following these users \(self.following)")
                             
                         }
                     })
@@ -195,10 +194,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             self.posts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
                 for snap in snapshot {
-                    print("SNAP: \(snap)")
                     
                     if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        print("POST: \(postDict)")
                         if let postUser = postDict["uid"] as? String {
                             if self.following.contains(postUser) {
                                 
@@ -218,20 +215,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         })
     }
     
-    
     /// Creating value for "Rank" - number of "Best-In-Shows" each user was been awarded
     func updateRank() {
         for user in users {
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.bestInShowDict = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                print("LEE: \(snapshot)")
                 for snap in snapshot {
                     
                     if let postDict = snap.value as? Dictionary<String, AnyObject> {
                         if let postUser = postDict["uid"] as? String {
                             if postUser == user.userID {
-                                print("LEEZUS - comparing the post User \(postUser) and \(user.userID)")
                                 if let bestInShow = postDict["bestInShow"] as? Bool {
                                     if bestInShow == true {
                                         
@@ -280,11 +274,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func test() {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
-        let realDate = result
+        let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.testPosts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
@@ -346,6 +336,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             return PostCell()
             
         }
+
     }
     
 
@@ -471,27 +462,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         }
     }
 }
-    
-//    @IBAction func segmentedPress(_ sender: Any) {
-//        tableView.reloadData()
-//        switch(self.segmentedController.selectedSegmentIndex) {
-//        case 0:
-//            codedLabel.isHidden = true
-//            if posts.count <= 0 {
-//                stopIndicator()
-//                otherLabel.isHidden = false }
-//            
-//        case 1:
-//            if testPosts.count <= 0 {
-//                stopIndicator()
-//                codedLabel.isHidden = false }
-//            otherLabel.isHidden = true
-//        default:
-//            codedLabel.isHidden = true
-//            otherLabel.isHidden = true
-//        }
-//    }
-//}
 
 extension FeedVC: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

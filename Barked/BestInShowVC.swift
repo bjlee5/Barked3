@@ -12,7 +12,7 @@ import SwiftKeychainWrapper
 import Foundation
 import UserNotifications
 
-class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CellSubclassDelegate, CommentsSubclassDelegate {
+class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
     
     // Refactor this storage ref using DataService //
     
@@ -30,13 +30,23 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     let otherLabel:UILabel = UILabel()
     var indicator = UIActivityIndicatorView()
     
+    var leaders = [Leaderboard]()
+    var filteredUsers = [Leaderboard]()
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    var screenSize: CGRect!
+    var screenWidth: CGFloat!
+    var screenHeight: CGFloat!
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var currentUser: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
+    
     //    @IBOutlet weak var segmentedController: UISegmentedControl!
     
     override func viewDidLoad() {
@@ -46,100 +56,32 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         followingFriends()
         loadUserInfo()
         fetchPosts()
+        retrieveUser()
         
+        collectionView.delegate = self
+        collectionView.dataSource = self
         tableView.delegate = self
         tableView.dataSource = self
         
+        /////////////// Layout /////////////////
         
-        //        followingFriends()
-        //        loadUserInfo()
-        //        fetchPosts()
-        //
-        //        tableView.delegate = self
-        //        tableView.dataSource = self
-        //        tableView.contentInset = UIEdgeInsets.zero
-        //
-        ////        startIndicator()
-        ////        segmentedController.selectedSegmentIndex = 0
-        //        self.posts.sort(by: self.sortDatesFor)
-        //        tableView.reloadData()
-        //
-        //        // Observer to Update "Likes" in Realtime
-        //
-        //        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
-        //            self.tableView.reloadData()
-        //            self.posts.sort(by: self.sortDatesFor)
-        //        })
-        //
-        //        // Coded Label
-        //
-        //        codedLabel.isHidden = true
-        //        codedLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-        //        codedLabel.textAlignment = .center
-        //        codedLabel.text = "There are no posts today"
-        //        codedLabel.numberOfLines=1
-        //        codedLabel.textColor=UIColor.gray
-        //        codedLabel.font=UIFont.systemFont(ofSize: 16)
-        //
-        //        view.addSubview(codedLabel)
-        //        codedLabel.translatesAutoresizingMaskIntoConstraints = false
-        //        codedLabel.centerXAnchor.constraint(equalTo: codedLabel.superview!.centerXAnchor).isActive = true
-        //        codedLabel.centerYAnchor.constraint(equalTo: codedLabel.superview!.centerYAnchor).isActive = true
-        //
-        //
-        //        // Other Label
-        //
-        //        otherLabel.isHidden = true
-        //        otherLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-        //        otherLabel.textAlignment = .center
-        //        otherLabel.text = "You are not following anyone"
-        //        otherLabel.numberOfLines=1
-        //        otherLabel.textColor=UIColor.gray
-        //        otherLabel.font=UIFont.systemFont(ofSize: 16)
-        //
-        //        view.addSubview(otherLabel)
-        //        otherLabel.translatesAutoresizingMaskIntoConstraints = false
-        //        otherLabel.centerXAnchor.constraint(equalTo: otherLabel.superview!.centerXAnchor).isActive = true
-        //        otherLabel.centerYAnchor.constraint(equalTo: otherLabel.superview!.centerYAnchor).isActive = true
-        //
+        screenSize = UIScreen.main.bounds
+        screenWidth = screenSize.width
+        screenHeight = screenSize.height
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0)
+        layout.itemSize = CGSize(width: screenWidth/4, height: screenWidth/4)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        collectionView!.collectionViewLayout = layout
+        
         profilePic.isHidden = true
         currentUser.isHidden = true
-        
-        
+
     }
     
     // End ViewDidLoad
-    
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(true)
-    ////        segmentedController.selectedSegmentIndex = 0
-    //        self.posts.sort(by: self.sortDatesFor)
-    //        tableView.reloadData()
-    //    }
-    //
-    //    override func viewDidAppear(_ animated: Bool) {
-    //        super.viewDidAppear(true)
-    ////        segmentedController.selectedSegmentIndex = 0
-    //        self.posts.sort(by: self.sortDatesFor)
-    //        tableView.reloadData()
-    //    }
-    
-    // MARK: - Activity Indicator
-    
-    func startIndicator() {
-        indicator.center = self.view.center
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
-        view.addSubview(indicator)
-        
-        indicator.startAnimating()
-        //        UIApplication.shared.beginIgnoringInteractionEvents()
-    }
-    
-    func stopIndicator() {
-        indicator.stopAnimating()
-        //        UIApplication.shared.endIgnoringInteractionEvents()
-    }
     
     // MARK: - Best in Show
     
@@ -258,7 +200,7 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                     }
                 }
                 
-                self.tableView.reloadData()
+                self.collectionView.reloadData()
                 self.posts.sort(by: self.sortDatesFor)
             }
         })
@@ -285,65 +227,182 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
         })
         
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
-    // User Feed //
+    func retrieveUser() {
+        let ref = FIRDatabase.database().reference()
+        ref.child("users").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+            
+            let users = snapshot.value as! [String: AnyObject]
+            self.leaders.removeAll()
+            for (_, value) in users {
+                if let uid = value["uid"] as? String {
+                    let userToShow = Leaderboard()
+                    if let username = value["username"] as? String {
+                        if let breed = value["breed"] as? String {
+                            if let rank = value["rank"] as? Int {
+                                let imagePath = value["photoURL"] as? String
+                                
+                                userToShow.username = username
+                                userToShow.imagePath = imagePath
+                                userToShow.breed = breed
+                                userToShow.rank = rank
+                                userToShow.userID = uid
+                                self.leaders.append(userToShow)
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            self.tableView.reloadData()
+        })
+        
+        ref.removeAllObservers()
+        
+    }
+    
+    // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredUsers.count
+        }
+        return leaders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        self.leaders.sort(by: self.sortRankFor)
+        let someLeader: Leaderboard
+        if searchController.isActive && searchController.searchBar.text != "" {
+            someLeader = filteredUsers[indexPath.row]
+        } else {
+            someLeader = leaders[indexPath.row]
+        }
         
+        let someUID = someLeader.userID
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "leaderboardCell", for: indexPath) as? LeaderboardCell {
+            cell.configure(leader: someLeader, indexPath: someUID!, rank: indexPath.row)
+            return cell
+        } else {
+            return LeaderboardCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var clickedUser = ""
+        if searchController.isActive && searchController.searchBar.text != "" {
+            clickedUser = filteredUsers[indexPath.row].userID
+        } else {
+            clickedUser = leaders[indexPath.row].userID
+        }
+        self.selectedUID = clickedUser
+        self.checkSelectedUID()
+        print("Your selectedUID is - \(selectedUID)")
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+
+    
+    // MARK: Collection View
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let post = posts[indexPath.row]
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfCell", for: indexPath) as? ProfileCell {
             
-            cell.delegate = self
-            cell.commentsDelegate = self
-            
-            if post.bestInShow == true {
-                cell.bestShowPic.isHidden = false
-            } else {
-                cell.bestShowPic.isHidden = true
-            }
-            cell.profilePic.sd_setImage(with: URL(string: post.profilePicURL))
-            cell.postPic.sd_setImage(with: URL(string: post.imageURL))
+            cell.layer.borderWidth = 1
+            cell.layer.borderColor = UIColor.white.cgColor
+            //            cell.frame.size.width = screenWidth / 4
+            //            cell.frame.size.height = screenWidth / 4
             cell.configureCell(post: post)
-            
-            
             return cell
         } else {
             
-            return PostCell()
+            return ProfileCell()
             
         }
     }
     
-    
-    
-    // MARK: - Helper Methods
-    
-    func buttonTapped(cell: PostCell) {
-        var clickedUser = ""
-        guard let indexPath = self.tableView.indexPath(for: cell) else { return }
-        clickedUser = posts[indexPath.row].uid
-        
-        DataService.ds.REF_BASE.child("users/\(clickedUser)").observe(.value, with: { (snapshot) in
-            
-            let user = Users(snapshot: snapshot)
-            self.selectedUID = user.uid
-            self.checkSelectedUID()
-        })
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! ProfileCell
+        selectedPost = cell.post
+        print("SNOOPY: \(selectedPost)")
+        performSegue(withIdentifier: "FriendPostVC", sender: self)
     }
     
-    func commentButtonTapped(cell: PostCell) {
-        var clickedPost: Post!
-        guard let indexPath = self.tableView.indexPath(for: cell) else { return }
-        clickedPost = posts[indexPath.row]
-        selectedPost = clickedPost
-        self.checkSelectedPost()
+    // MARK: Helper Methods
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "FriendPostVC" {
+            print("LEEZUS: Segway to DeletePost is performed!")
+            let destinationViewController = segue.destination as! FriendPostVC
+            destinationViewController.selectedPost = selectedPost
+        }
+    }
+    
+    func updateRank() {
+        for leader in leaders {
+            let userRef = DataService.ds.REF_USERS.child(leader.userID)
+            var rank: Int
+            var bestInShowAmount = [Post]()
+            DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+                bestInShowAmount = []
+                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for snap in snapshot {
+                        
+                        if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                            print("POST: \(postDict)")
+                            if let userRank = postDict["bestInShow"] as? Bool {
+                                if userRank == true {
+                                    print("WOOBLES - your best in show count is \(bestInShowAmount.count)")
+                                    
+                                    let key = snap.key
+                                    let post = Post(postKey: key, postData: postDict)
+                                    bestInShowAmount.append(post)
+                                    
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            })
+            rank = bestInShowAmount.count
+            userRef.child("rank").setValue(rank)
+        }
+    }
+    
+    func sortRankFor(this: Leaderboard, that: Leaderboard) -> Bool {
+        if that.rank == nil {
+            that.rank = 0
+        }
+        if this.rank == nil {
+            this.rank = 0
+        }
+        return this.rank > that.rank
+    }
+    
+    /// Search Functionality
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filteredUsers = leaders.filter { user in
+            return user.username.lowercased().contains(searchText.lowercased()) || user.breed.lowercased().contains(searchText.lowercased())
+        }
+        
+        tableView.reloadData()
     }
     
     func checkSelectedPost() {
@@ -421,6 +480,12 @@ class BestInShowVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 extension BestInShowVC: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
+    }
+}
+
+extension BestInShowVC: UISearchResultsUpdating {
+    public func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
     }
 }
 

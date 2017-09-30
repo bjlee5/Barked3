@@ -15,6 +15,8 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var storageRef: FIRStorage { return FIRStorage.storage() }
     var selectedUID: String = ""
+    var filteredUsers = [Leaderboard]()
+    let searchController = UISearchController(searchResultsController: nil)
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,22 +26,36 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         retrieveUser()
         tableView.delegate = self
         tableView.dataSource = self
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
 
     }
     
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return leaders.count 
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredUsers.count
+        }
+        return leaders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         self.leaders.sort(by: self.sortRankFor)
-        let someLeader = leaders[indexPath.row]
+        let someLeader: Leaderboard
+        if searchController.isActive && searchController.searchBar.text != "" {
+            someLeader = filteredUsers[indexPath.row]
+        } else {
+            someLeader = leaders[indexPath.row]
+        }
+        
         let someUID = someLeader.userID
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "leaderboardCell", for: indexPath) as? LeaderboardCell {
-            cell.configure(leader: someLeader, indexPath: someUID!)
+            cell.configure(leader: someLeader, indexPath: someUID!, rank: indexPath.row)
             return cell
         } else {
             return LeaderboardCell()
@@ -47,24 +63,46 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            selectedUID = leaders[indexPath.row].userID
-            checkSelectedUID()
+        var clickedUser = ""
+                if searchController.isActive && searchController.searchBar.text != "" {
+            clickedUser = filteredUsers[indexPath.row].userID
+                } else {
+            clickedUser = leaders[indexPath.row].userID
+            }
+            self.selectedUID = clickedUser
+            self.checkSelectedUID()
+            print("Your selectedUID is - \(selectedUID)")
+        
         }
     
     // MARK: - Helper Methods
     
-    /// Segues to "Follow" notification details
-    func checkSelectedUID() {
-        if selectedUID == FIRAuth.auth()?.currentUser?.uid {
-            let profileVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
-            self.present(profileVC, animated: true, completion: nil)
-        } else if selectedUID != "" {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "FriendProfileVC") as! FriendProfileVC
-            vc.selectedUID = selectedUID
-            self.present(vc, animated: true, completion: nil)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "FriendProfileVC" {
+            let destinationViewController = segue.destination as! FriendProfileVC
+            destinationViewController.selectedUID = selectedUID
         }
     }
+    
+    func checkSelectedUID() {
+        if selectedUID != "" {
+            performSegue(withIdentifier: "FriendProfileVC", sender: self)
+        }
+    }
+    
+    
+    /// Segues to "Follow" notification details
+//    func checkSelectedUID() {
+//        if selectedUID == FIRAuth.auth()?.currentUser?.uid {
+//            let profileVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
+//            self.present(profileVC, animated: true, completion: nil)
+//        } else if selectedUID != "" {
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let vc = storyboard.instantiateViewController(withIdentifier: "FriendProfileVC") as! FriendProfileVC
+//            vc.selectedUID = selectedUID
+//            self.present(vc, animated: true, completion: nil)
+//        }
+//    }
     
     /// Pulls down users from Firebase and assigns them to [Friend]
     func retrieveUser() {
@@ -142,9 +180,24 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         return this.rank > that.rank
     }
     
+    /// Search Functionality
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filteredUsers = leaders.filter { user in
+            return user.username.lowercased().contains(searchText.lowercased()) || user.breed.lowercased().contains(searchText.lowercased())
+        }
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Actions 
     
     @IBAction func backPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension LeaderboardVC: UISearchResultsUpdating {
+    public func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
     }
 }

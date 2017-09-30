@@ -140,7 +140,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.posts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                print("LEE: \(snapshot)")
                 for snap in snapshot {
                     
                     if let postDict = snap.value as? Dictionary<String, AnyObject> {
@@ -169,7 +168,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.bestInShowDict = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                print("LEE: \(snapshot)")
                 for snap in snapshot {
                     
                     if let postDict = snap.value as? Dictionary<String, AnyObject> {
@@ -347,7 +345,6 @@ class FriendProfileVC: UIViewController, UICollectionViewDataSource, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! ProfileCell
         selectedPost = cell.post
-        print("SNOOPY: \(selectedPost)")
         performSegue(withIdentifier: "FriendPostVC", sender: self)
     }
     

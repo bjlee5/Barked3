@@ -77,7 +77,7 @@ class DeletePostVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let imageRef = storage.child("posts").child(uid).child("\(selectedPost.postKey).jpg")
         imageRef.delete { error in
             if error != nil {
-                print("LEEZUS: Your posts have not been removed successfully - FAGGOT!")
+                print("LEEZUS: Your posts have not been removed successfuly")
             } else {
                 
             }

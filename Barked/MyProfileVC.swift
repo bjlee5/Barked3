@@ -80,7 +80,6 @@ class MyProfileVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         layout.minimumLineSpacing = 0
         collectionView!.collectionViewLayout = layout
         
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {

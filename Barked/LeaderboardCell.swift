@@ -23,13 +23,15 @@ class LeaderboardCell: UITableViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var userBreed: UILabel!
     @IBOutlet weak var bestInShowCount: UILabel!
+    @IBOutlet weak var rankLabel: UILabel!
     
-    func configure(leader: Leaderboard, indexPath: String) {
+    func configure(leader: Leaderboard, indexPath: String, rank: Int) {
         
         self.leader = leader
         self.usernameLabel.text = leader.username
         self.userBreed.text = leader.breed
         self.bestInShowCount.text = "\(leader.rank!)"
+        self.rankLabel.text = "\(rank + 1)"
         
         profileImage.sd_setImage(with: URL(string: leader.imagePath))
         

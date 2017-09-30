@@ -245,11 +245,12 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
     /// Search Functionality
     func filterContentForSearchText(searchText: String, scope: String = "All") {
         filteredUsers = users.filter { user in
-            return user.username.lowercased().contains(searchText.lowercased())
+            return user.username.lowercased().contains(searchText.lowercased()) || user.breed.lowercased().contains(searchText.lowercased())
         }
         
         friendsTableView.reloadData()
     }
+    
     
     /// Pulls down users from Firebase and assigns them to [Friend]
     func retrieveUser() {
