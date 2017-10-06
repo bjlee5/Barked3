@@ -31,7 +31,6 @@ class FriendFollowingVC: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewDidLoad()
         
         getFollowersUsersUID()
-        uidToFriend()
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -42,18 +41,32 @@ class FriendFollowingVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     /// Pulls down users and appends UID's of following users to displayedUsers: [Array]
     func getFollowersUsersUID() {
-        
-        ref.child("users").child(selectedUID).child("following").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+        let ref = FIRDatabase.database().reference()
+        let someRef = FIRDatabase.database().reference().child("users").child(selectedUID)
+        ref.child("users").queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
             
             let users = snapshot.value as! [String: AnyObject]
-            self.users.removeAll()
+            
             for (_, value) in users {
-                self.displayedUsers.append(value as! String)
+                if let uName = value["username"] as? String {
+                    someRef.observe(.value, with: { (snapshot) in
+                        
+                        let myUser = Users(snapshot: snapshot)
+                        
+                        if uName == myUser.username {
+                            if let followingUsers = value["following"] as? [String: String] {
+                                for (_, user) in followingUsers {
+                                    self.displayedUsers.append(user)
+                                    
+                                }
+                            }
+                        }
+                    })
+                }
             }
+            
+            self.uidToFriend()
         })
-        
-        ref.removeAllObservers()
-        
     }
     
     /// Pulls users from Firebase and appends to users: [Array]

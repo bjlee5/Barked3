@@ -45,12 +45,26 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        retrieveUser()
         checkNotificationsRead()
+        startIndicator()
+        retrieveUser()
         self.posts.sort(by: self.sortDatesFor)
         followingFriends()
         loadUserInfo()
         fetchPosts()
+        
+        otherLabel.isHidden = true
+        otherLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
+        otherLabel.textAlignment = .center
+        otherLabel.text = "You are not following anyone"
+        otherLabel.numberOfLines=1
+        otherLabel.textColor=UIColor.gray
+        otherLabel.font=UIFont.systemFont(ofSize: 16)
+        
+        view.addSubview(otherLabel)
+        otherLabel.translatesAutoresizingMaskIntoConstraints = false
+        otherLabel.centerXAnchor.constraint(equalTo: otherLabel.superview!.centerXAnchor).isActive = true
+        otherLabel.centerYAnchor.constraint(equalTo: otherLabel.superview!.centerYAnchor).isActive = true
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -63,14 +77,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.tableView.reloadData()
         })
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        checkNotificationsRead()
+        
     }
-    
     
     // MARK: - Activity Indicator
     
@@ -92,30 +104,34 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     // MARK: - Best in Show
     
     func bestInShow() {
-        let mostLikes = testPosts.map { $0.likes }.max()
-        for post in testPosts {
+        DispatchQueue.global().async {
+        let mostLikes = self.testPosts.map { $0.likes }.max()
+        for post in self.testPosts {
             if post.likes >= mostLikes! {
                 let topPost = post
 
                 DataService.ds.REF_POSTS.child(topPost.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                     topPost.adjustBestInShow(addBest: true)
                     
-                })
+                    })
                 
+                }
             }
         }
     }
                 
     func worstInShow() {
-        let mostLikes = testPosts.map { $0.likes }.max()
-        for post in testPosts {
+        DispatchQueue.global().async {
+        let mostLikes = self.testPosts.map { $0.likes }.max()
+        for post in self.testPosts {
                 if post.likes < mostLikes! {
                     let otherPosts = post
                     DataService.ds.REF_POSTS.child(otherPosts.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                         otherPosts.adjustBestInShow(addBest: false)
-                    })
-                }
+                        })
+                    }
             
+                }
             }
         }
     
@@ -208,7 +224,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                         }
                     }
                 }
-                
                 self.tableView.reloadData()
                 self.posts.sort(by: self.sortDatesFor)
             }
@@ -217,7 +232,13 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     /// Creating value for "Rank" - number of "Best-In-Shows" each user was been awarded
     func updateRank() {
-        for user in users {
+        if posts.count <= 0 {
+            stopIndicator()
+            otherLabel.isHidden = false
+            print("LEEZUS: Your label function is being executed")
+        } else {
+        DispatchQueue.global().async {
+        for user in self.users {
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.bestInShowDict = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
@@ -235,16 +256,18 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                                         let rank = self.bestInShowDict.count
                                         DataService.ds.REF_USERS.child(user.userID).child("rank").setValue(rank)
                                         print("LEEZUS: Ranks have been updated")
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            })
+                })
+            }
         }
     }
+}
     
     func retrieveUser() {
         let ref = FIRDatabase.database().reference()
@@ -303,7 +326,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let post = posts[indexPath.row]
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostCell {
@@ -325,21 +347,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
 //                            } else {
 //                
 //            }
-            
+            self.stopIndicator()
+            otherLabel.isHidden = true
             cell.configureCell(post: post)
             self.bestInShow()
             self.worstInShow()
-            
             return cell
         } else {
-            
             return PostCell()
             
         }
-
     }
-    
-
     
     // MARK: - Helper Methods
     
