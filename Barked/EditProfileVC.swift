@@ -39,10 +39,6 @@ class EditProfileVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let dogs = Breeds()
-        let myDogs = dogs.breedList
-        breeds = myDogs
-        
         usernameField.backgroundColor = UIColor.clear
         emailField.backgroundColor = UIColor.clear
         breedField.backgroundColor = UIColor.clear

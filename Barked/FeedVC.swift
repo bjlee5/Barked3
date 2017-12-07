@@ -23,7 +23,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     var bestInShowDict = [Post]()
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var storageRef: FIRStorage { return FIRStorage.storage() }
-    var profilePicLoaded = false 
+    var profilePicLoaded = false
     var following = [String]()
     /// Referencing the Storage DB then, current User
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
@@ -40,31 +40,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var currentUser: UILabel!
     @IBOutlet weak var tableView: UITableView!
-//    @IBOutlet weak var segmentedController: UISegmentedControl!
+    //    @IBOutlet weak var segmentedController: UISegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        checkNotificationsRead()
-        startIndicator()
         retrieveUser()
+        checkNotificationsRead()
         self.posts.sort(by: self.sortDatesFor)
         followingFriends()
         loadUserInfo()
         fetchPosts()
-        
-        otherLabel.isHidden = true
-        otherLabel.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-        otherLabel.textAlignment = .center
-        otherLabel.text = "You are not following anyone"
-        otherLabel.numberOfLines=1
-        otherLabel.textColor=UIColor.gray
-        otherLabel.font=UIFont.systemFont(ofSize: 16)
-        
-        view.addSubview(otherLabel)
-        otherLabel.translatesAutoresizingMaskIntoConstraints = false
-        otherLabel.centerXAnchor.constraint(equalTo: otherLabel.superview!.centerXAnchor).isActive = true
-        otherLabel.centerYAnchor.constraint(equalTo: otherLabel.superview!.centerYAnchor).isActive = true
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -77,12 +63,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.tableView.reloadData()
         })
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+        checkNotificationsRead()
     }
+    
     
     // MARK: - Activity Indicator
     
@@ -93,47 +81,43 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         view.addSubview(indicator)
         
         indicator.startAnimating()
-//        UIApplication.shared.beginIgnoringInteractionEvents()
+        //        UIApplication.shared.beginIgnoringInteractionEvents()
     }
     
     func stopIndicator() {
         indicator.stopAnimating()
-//        UIApplication.shared.endIgnoringInteractionEvents()
+        //        UIApplication.shared.endIgnoringInteractionEvents()
     }
     
     // MARK: - Best in Show
     
     func bestInShow() {
-        DispatchQueue.global().async {
-        let mostLikes = self.testPosts.map { $0.likes }.max()
-        for post in self.testPosts {
+        let mostLikes = testPosts.map { $0.likes }.max()
+        for post in testPosts {
             if post.likes >= mostLikes! {
                 let topPost = post
-
+                
                 DataService.ds.REF_POSTS.child(topPost.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
                     topPost.adjustBestInShow(addBest: true)
                     
-                    })
+                })
                 
-                }
             }
         }
     }
-                
+    
     func worstInShow() {
-        DispatchQueue.global().async {
-        let mostLikes = self.testPosts.map { $0.likes }.max()
-        for post in self.testPosts {
-                if post.likes < mostLikes! {
-                    let otherPosts = post
-                    DataService.ds.REF_POSTS.child(otherPosts.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
-                        otherPosts.adjustBestInShow(addBest: false)
-                        })
-                    }
-            
-                }
+        let mostLikes = testPosts.map { $0.likes }.max()
+        for post in testPosts {
+            if post.likes < mostLikes! {
+                let otherPosts = post
+                DataService.ds.REF_POSTS.child(otherPosts.postKey).observeSingleEvent(of: .value, with: { (snapshot) in
+                    otherPosts.adjustBestInShow(addBest: false)
+                })
             }
+            
         }
+    }
     
     func loadUserInfo(){
         userRef.observe(.value, with: { (snapshot) in
@@ -224,6 +208,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                         }
                     }
                 }
+                
                 self.tableView.reloadData()
                 self.posts.sort(by: self.sortDatesFor)
             }
@@ -232,42 +217,34 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     
     /// Creating value for "Rank" - number of "Best-In-Shows" each user was been awarded
     func updateRank() {
-        if posts.count <= 0 {
-            stopIndicator()
-            otherLabel.isHidden = false
-            print("LEEZUS: Your label function is being executed")
-        } else {
-        DispatchQueue.global().async {
-        for user in self.users {
-        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
-            self.bestInShowDict = []
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    
-                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        if let postUser = postDict["uid"] as? String {
-                            if postUser == user.userID {
-                                if let bestInShow = postDict["bestInShow"] as? Bool {
-                                    if bestInShow == true {
-                                        
-                                        let bestKey = snap.key
-                                        let bestPost = Post(postKey: bestKey, postData: postDict)
-                                        self.bestInShowDict.append(bestPost)
-                                        let rank = self.bestInShowDict.count
-                                        DataService.ds.REF_USERS.child(user.userID).child("rank").setValue(rank)
-                                        print("LEEZUS: Ranks have been updated")
-                                            }
+        for user in users {
+            DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+                self.bestInShowDict = []
+                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for snap in snapshot {
+                        
+                        if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                            if let postUser = postDict["uid"] as? String {
+                                if postUser == user.userID {
+                                    if let bestInShow = postDict["bestInShow"] as? Bool {
+                                        if bestInShow == true {
+                                            
+                                            let bestKey = snap.key
+                                            let bestPost = Post(postKey: bestKey, postData: postDict)
+                                            self.bestInShowDict.append(bestPost)
+                                            let rank = self.bestInShowDict.count
+                                            DataService.ds.REF_USERS.child(user.userID).child("rank").setValue(rank)
+                                            print("LEEZUS: Ranks have been updated")
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                })
-            }
+                }
+            })
         }
     }
-}
     
     func retrieveUser() {
         let ref = FIRDatabase.database().reference()
@@ -289,15 +266,23 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
                     }
                 }
             }
-
+            
         })
         
         ref.removeAllObservers()
         
     }
     
+    func formatDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        return result
+    }
+    
     func test() {
-        let realDate = DateFormatter.localizedString(from: NSDate() as Date, dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
+        let realDate = formatDate()
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             self.testPosts = []
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
@@ -326,6 +311,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let post = posts[indexPath.row]
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostCell {
@@ -341,50 +327,37 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             
             cell.postPic.sd_setImage(with: URL(string: post.imageURL))
             cell.profilePic.sd_setImage(with: URL(string: post.profilePicURL))
-            
-//            if let img = FeedVC.imageCache.object(forKey: post.imageURL as NSString!) {
-//                                cell.configureCell(post: post, img: img)
-//                            } else {
-//                
-//            }
-            self.stopIndicator()
-            otherLabel.isHidden = true
             cell.configureCell(post: post)
             self.bestInShow()
             self.worstInShow()
+            
             return cell
         } else {
-            return PostCell()
             
+            return PostCell()
         }
     }
     
-    // MARK: - Helper Methods
     
-    func formatDate() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
-        return result
-    }
+    
+    // MARK: - Helper Methods
     
     func buttonTapped(cell: PostCell) {
         var clickedUser = ""
         guard let indexPath = self.tableView.indexPath(for: cell) else { return }
         clickedUser = posts[indexPath.row].uid
-
+        
         DataService.ds.REF_BASE.child("users/\(clickedUser)").observe(.value, with: { (snapshot) in
             
             let user = Users(snapshot: snapshot)
             self.selectedUID = user.uid
             self.checkSelectedUID()
-    })
-}
+        })
+    }
     
     func commentButtonTapped(cell: PostCell) {
-    var clickedPost: Post!
-    guard let indexPath = self.tableView.indexPath(for: cell) else { return }
+        var clickedPost: Post!
+        guard let indexPath = self.tableView.indexPath(for: cell) else { return }
         clickedPost = posts[indexPath.row]
         selectedPost = clickedPost
         self.checkSelectedPost()
@@ -421,7 +394,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
             content.body = "You're currently today's best in show!"
             content.sound = UNNotificationSound.default()
             content.badge = NOTE_BADGE_NUMBER as NSNumber
-
+            
             let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             UNUserNotificationCenter.current().add(request) { (error: Error?) in
@@ -435,17 +408,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
         }
     }
     
-    ///Check if notifications have been read 
+    ///Check if notifications have been read
     func checkNotificationsRead() {
-            DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
-                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                    for snap in snapshot {
-                        print("SNAP: \(snap)")
-                        
-                        if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                            if let postUser = postDict["read"] as? Bool {
-                                print("DYEUCK: \(postUser)")
-                                if postUser == false {
+        DataService.ds.REF_CURRENT_USERS.child("notifications").observe(.value, with: { (snapshot) in
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    print("SNAP: \(snap)")
+                    
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        if let postUser = postDict["read"] as? Bool {
+                            print("DYEUCK: \(postUser)")
+                            if postUser == false {
                                 self.tabBarController?.tabBar.items?[3].badgeValue = "1"
                             }
                         }
@@ -456,16 +429,16 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Cell
     }
     
     // MARK: - Actions
-
+    
     @IBAction func profileBtn(_ sender: Any) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileVC")
         self.present(vc, animated: true, completion: nil)
     }
-
+    
     // Logging Out //
     
     @IBAction func signOutPress(_ sender: Any) {
-    
+        
         let firebaseAuth = FIRAuth.auth()
         do {
             try firebaseAuth?.signOut()
@@ -486,3 +459,4 @@ extension FeedVC: UNUserNotificationCenterDelegate {
         completionHandler([.alert, .sound])
     }
 }
+

@@ -95,33 +95,6 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         }
     }
     
-    /// Schedules Push Notifications
-    
-    func scheduleNotifications() {
-        userRef.observe(.value, with: { (snapshot) in
-            
-            let user = Users(snapshot: snapshot)
-            let notifyingUser = String(user.username)
-            print("WOOBLES - Schedule notification is run!!!")
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
-            let content = UNMutableNotificationContent()
-            content.body = "\(self.currentUsername!) is now following you!"
-            content.sound = UNNotificationSound.default()
-            content.badge = NOTE_BADGE_NUMBER as! NSNumber
-            
-            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            UNUserNotificationCenter.current().add(request) { (error: Error?) in
-                if let error = error {
-                    print("Error is \(error.localizedDescription)")
-                    
-                }
-            }
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
-    
     /// Path to Users profile
     func profileBtnTapped(cell: UserCell) {
         var isFollower = false
@@ -296,10 +269,32 @@ class FriendsVC: UIViewController, UITableViewDataSource, UITableViewDelegate, U
         return result
     }
     
+    /// Schedules Push Notifications
+    
+    func scheduleNotifications() {
+        
+            let notifyingUser = currentUsername
+            print("WOOBLES - Schedule notification is run!!!")
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
+            let content = UNMutableNotificationContent()
+            content.body = "\(String(describing: notifyingUser)) is now following you!"
+            content.sound = UNNotificationSound.default()
+            content.badge = NOTE_BADGE_NUMBER as NSNumber
+            
+            let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            UNUserNotificationCenter.current().add(request) { (error: Error?) in
+                if let error = error {
+                    print("Error is \(error.localizedDescription)")
+                    
+                }
+            }
+        }
+    
     /// Notification for Following User 
     func followingNotification(imgURL: String, selectedPostUID: String) {
         
-        self.scheduleNotifications()
+        scheduleNotifications()
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [

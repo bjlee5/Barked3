@@ -30,7 +30,7 @@ class LeaderboardCell: UITableViewCell {
         self.leader = leader
         self.usernameLabel.text = leader.username
         self.userBreed.text = leader.breed
-        self.bestInShowCount.text = "\(leader.rank!)"
+        self.bestInShowCount.text = "\(leader.winCount!)"
         self.rankLabel.text = "\(rank + 1)"
         
         profileImage.sd_setImage(with: URL(string: leader.imagePath))

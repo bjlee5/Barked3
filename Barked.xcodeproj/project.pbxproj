@@ -19,11 +19,13 @@
 		D029CA8D1EB27D60009788CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D029CA8B1EB27D60009788CE /* LaunchScreen.storyboard */; };
 		D047E4071F3018C2007814D4 /* BestInShowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047E4061F3018C2007814D4 /* BestInShowVC.swift */; };
 		D047E4091F30C21E007814D4 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047E4081F30C21E007814D4 /* NotificationsVC.swift */; };
+		D047F6C51F88947100C187FA /* FirstNewUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047F6C41F88947100C187FA /* FirstNewUserVC.swift */; };
+		D047F6C71F88949F00C187FA /* SecondNewUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047F6C61F88949F00C187FA /* SecondNewUserVC.swift */; };
+		D047F6C91F8894B800C187FA /* ThirdNewUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047F6C81F8894B800C187FA /* ThirdNewUserVC.swift */; };
+		D047F6CB1F88950800C187FA /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047F6CA1F88950800C187FA /* WelcomeVC.swift */; };
 		D0536CC21EF3099900DFFE94 /* BoarderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0536CC11EF3099900DFFE94 /* BoarderedView.swift */; };
 		D0746FDD1F26AE4C00AAD6D7 /* FriendFollowingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0746FDC1F26AE4C00AAD6D7 /* FriendFollowingVC.swift */; };
 		D0746FDF1F26AF1B00AAD6D7 /* FriendFollowersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */; };
-		D074DA671F1E5F1500D587BA /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA661F1E5F1400D587BA /* click.mp3 */; };
-		D074DA691F1E615600D587BA /* clicky.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D074DA681F1E615500D587BA /* clicky.mp3 */; };
 		D075DAE21EB79E880099292E /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAE11EB79E880099292E /* PostVC.swift */; };
 		D075DAE91EB8C2800099292E /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAE81EB8C2800099292E /* CircleView.swift */; };
 		D075DAEB1EB8C2DC0099292E /* SexyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075DAEA1EB8C2DC0099292E /* SexyButton.swift */; };
@@ -85,11 +87,13 @@
 		D029CA8E1EB27D60009788CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D047E4061F3018C2007814D4 /* BestInShowVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestInShowVC.swift; sourceTree = "<group>"; };
 		D047E4081F30C21E007814D4 /* NotificationsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
+		D047F6C41F88947100C187FA /* FirstNewUserVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstNewUserVC.swift; sourceTree = "<group>"; };
+		D047F6C61F88949F00C187FA /* SecondNewUserVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondNewUserVC.swift; sourceTree = "<group>"; };
+		D047F6C81F8894B800C187FA /* ThirdNewUserVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdNewUserVC.swift; sourceTree = "<group>"; };
+		D047F6CA1F88950800C187FA /* WelcomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		D0536CC11EF3099900DFFE94 /* BoarderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoarderedView.swift; sourceTree = "<group>"; };
 		D0746FDC1F26AE4C00AAD6D7 /* FriendFollowingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendFollowingVC.swift; sourceTree = "<group>"; };
 		D0746FDE1F26AF1B00AAD6D7 /* FriendFollowersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendFollowersVC.swift; sourceTree = "<group>"; };
-		D074DA661F1E5F1400D587BA /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = click.mp3; path = ../../click.mp3; sourceTree = "<group>"; };
-		D074DA681F1E615500D587BA /* clicky.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = clicky.mp3; path = ../../clicky.mp3; sourceTree = "<group>"; };
 		D075DAE11EB79E880099292E /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		D075DAE81EB8C2800099292E /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D075DAEA1EB8C2DC0099292E /* SexyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexyButton.swift; sourceTree = "<group>"; };
@@ -192,8 +196,6 @@
 				D075DAFC1EBA83730099292E /* ErrorBark.wav */,
 				D075DB061EBA992B0099292E /* Post.mp3 */,
 				D075DB041EBA99280099292E /* Woof.mp3 */,
-				D074DA661F1E5F1400D587BA /* click.mp3 */,
-				D074DA681F1E615500D587BA /* clicky.mp3 */,
 				D075DB081EBB47C30099292E /* Liked.mp3 */,
 				D075DB021EBA957E0099292E /* DogShakingHead.wav */,
 				D029CA831EB27D60009788CE /* Main.storyboard */,
@@ -253,6 +255,10 @@
 			isa = PBXGroup;
 			children = (
 				D029CA811EB27D60009788CE /* LogInVC.swift */,
+				D047F6C41F88947100C187FA /* FirstNewUserVC.swift */,
+				D047F6C61F88949F00C187FA /* SecondNewUserVC.swift */,
+				D047F6C81F8894B800C187FA /* ThirdNewUserVC.swift */,
+				D047F6CA1F88950800C187FA /* WelcomeVC.swift */,
 				D0E2108E1EB40E3200067DA9 /* NewUserVC.swift */,
 				D0E210961EB40E6F00067DA9 /* FriendsVC.swift */,
 				D0E2108C1EB40E2500067DA9 /* FeedVC.swift */,
@@ -367,12 +373,10 @@
 			files = (
 				D075DB091EBB47C30099292E /* Liked.mp3 in Resources */,
 				D0B226571F3620EB00FEE622 /* Assets2.xcassets in Resources */,
-				D074DA671F1E5F1500D587BA /* click.mp3 in Resources */,
 				D075DB071EBA992B0099292E /* Post.mp3 in Resources */,
 				D075DAF11EB8C38A0099292E /* GoogleService-Info.plist in Resources */,
 				D029CA8D1EB27D60009788CE /* LaunchScreen.storyboard in Resources */,
 				D075DB031EBA957F0099292E /* DogShakingHead.wav in Resources */,
-				D074DA691F1E615600D587BA /* clicky.mp3 in Resources */,
 				D075DAFD1EBA83730099292E /* ErrorBark.wav in Resources */,
 				D075DB051EBA99280099292E /* Woof.mp3 in Resources */,
 				D029CA851EB27D60009788CE /* Main.storyboard in Resources */,
@@ -444,7 +448,9 @@
 				D075DB111EBCC3F50099292E /* FriendProfileVC.swift in Sources */,
 				D001B4261EE860750007020D /* FriendPostVC.swift in Sources */,
 				D075DB0D1EBC9AB00099292E /* DeletePostCell.swift in Sources */,
+				D047F6C71F88949F00C187FA /* SecondNewUserVC.swift in Sources */,
 				D029CA821EB27D60009788CE /* LogInVC.swift in Sources */,
+				D047F6C91F8894B800C187FA /* ThirdNewUserVC.swift in Sources */,
 				D047E4091F30C21E007814D4 /* NotificationsVC.swift in Sources */,
 				D075DAEB1EB8C2DC0099292E /* SexyButton.swift in Sources */,
 				D0790AB31ED8CB9100684667 /* Breeds.swift in Sources */,
@@ -472,9 +478,11 @@
 				D0FFA9271F3227E900C6BDC1 /* Notification.swift in Sources */,
 				D0FFA9291F32352900C6BDC1 /* NotificationCell.swift in Sources */,
 				D0BEC92A1EE71805000181DA /* Comment.swift in Sources */,
+				D047F6CB1F88950800C187FA /* WelcomeVC.swift in Sources */,
 				D075DAE21EB79E880099292E /* PostVC.swift in Sources */,
 				D047E4071F3018C2007814D4 /* BestInShowVC.swift in Sources */,
 				D0E210AD1EB40FD100067DA9 /* Constants.swift in Sources */,
+				D047F6C51F88947100C187FA /* FirstNewUserVC.swift in Sources */,
 				D004F7831F4FFAF000523C29 /* LeaderboardVC.swift in Sources */,
 				D0E210B11EB40FE300067DA9 /* DataService.swift in Sources */,
 				D07CB60C1F22612F00034CB8 /* MyFollowingVC.swift in Sources */,

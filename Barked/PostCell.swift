@@ -31,6 +31,7 @@ class PostCell: UITableViewCell {
     var storageRef: FIRStorage { return FIRStorage.storage() }
     let userRef = DataService.ds.REF_BASE.child("users/\(FIRAuth.auth()!.currentUser!.uid)")
     var currentUsername: String!
+    var currentUID: String!
     var currentUserPic: UIImage!
     var postKey: String = ""
     var selectedUID: String = ""
@@ -75,6 +76,7 @@ class PostCell: UITableViewCell {
             let user = Users(snapshot: snapshot)
             let imageURL = user.photoURL!
             self.currentUsername = user.username
+            self.currentUID = user.uid
             
             /// We are downloading the current user's ImageURL then converting it using "data" to the UIImage which takes a property of data
             self.storageRef.reference(forURL: imageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
@@ -183,14 +185,13 @@ class PostCell: UITableViewCell {
     
     func scheduleNotifications() {
         
-        userRef.observe(.value, with: { (snapshot) in
-            
-            let user = Users(snapshot: snapshot)
+            print("PUSSY: Schedule notification has been run!!!")
+        
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
             var badge = 0
             badge += 1
-            content.body = "\(self.currentUsername!) liked your photo!"
+            content.body = "\(currentUsername) liked your photo!"
             content.sound = UNNotificationSound.default()
             content.badge = badge as NSNumber
             
@@ -202,10 +203,7 @@ class PostCell: UITableViewCell {
                     
                 }
             }
-        }) { (error) in
-            print(error.localizedDescription)
         }
-    }
     
     // Retrieve the Current Date //
     
@@ -219,7 +217,7 @@ class PostCell: UITableViewCell {
     
     func likeNotification(imgURL: String) {
         loadUserInfo()
-        scheduleNotifications()
+
         let uid = FIRAuth.auth()?.currentUser?.uid
         
         let notification: Dictionary<String, Any> = [
@@ -235,7 +233,7 @@ class PostCell: UITableViewCell {
         
         let firebaseNotify = DataService.ds.REF_USERS.child(self.post.uid).child("notifications").childByAutoId()
         firebaseNotify.setValue(notification)
-        
+        scheduleNotifications()
     }
     
     func downloadLikingUserPhoto() {

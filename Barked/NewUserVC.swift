@@ -7,8 +7,6 @@
 //
 
 import UIKit
-
-import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
@@ -18,8 +16,9 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     var imagePicker: UIImagePickerController!
     var imageSelected = false
-    var breeds = [String]()
     var selectedBreed: String?
+    
+    let breedList:[(breed: String, group: String)] = [("Affenpinscher", breed.toy.rawValue), ("Afghan Hound", breed.hound.rawValue), ("Airedale Terrier", breed.terrier.rawValue), ("Akita", breed.working.rawValue), ("Alaskan Malamute", breed.working.rawValue), ("American English Coonhound", breed.hound.rawValue), ("American Eskimo Dog", breed.nonSporting.rawValue), ("American Foxhound", breed.hound.rawValue), ("American Hairless Terrier", breed.terrier.rawValue), ("American Leopard Hound", breed.terrier.rawValue), ("American Staffordshire Terrier", breed.terrier.rawValue), ("American Water Spaniel", breed.sporting.rawValue), ("Anatolian Shepherd Dog", breed.herding.rawValue), ("Appenzeller Sennenhunde", breed.hound.rawValue), ("Australian Cattle Dog", breed.herding.rawValue), ("Austrailian Shepherd", breed.herding.rawValue), ("Austrailian Terrier", breed.terrier.rawValue), ("Azawakh", breed.hound.rawValue)]
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -56,7 +55,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         let dogs = Breeds()
         let myDogs = dogs.breedList
-        breeds = myDogs
+        var breeds = myDogs
         
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -85,15 +84,15 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         return 1
     }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return breeds.count
+        return breedList.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return breeds[row]
+        return breedList[row].breed
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedBreed = breeds[row]
+        selectedBreed = breedList[row].breed
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -110,7 +109,7 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         label.font = UIFont(name: "SanFranciscoText-Light", size: 12)
         
         // where data is an Array of String
-        label.text = breeds[row]
+        label.text = breedList[row].breed
         
         return label
     }
@@ -208,20 +207,16 @@ class NewUserVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
     }
     
-    
     // This is func completeSignInID.createFIRDBuser from SocialApp1. Instead of only providing "provider": user.providerID - there is additional information provided - for the username, profile pic, etc. We need to provide a place for this information to be input. //
     
     private func saveUserInfo(user: FIRUser!, username: String, password: String, breed: String, image: String) {
-        
         
         let userInfo = ["email": user.email!, "username": username , "uid": user.uid , "breed": breed, "photoURL": image, "provider": user.providerID]
         
         self.completeSignIn(id: user.uid, userData: userInfo)
         print("BRIAN: User info has been saved to the database")
-        
     }
     
-
     @IBAction func selectedBreed(_ sender: Any) {
         pickerView.isHidden = false
     }

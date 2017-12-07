@@ -57,6 +57,7 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         loadUserInfo()
         fetchPosts()
         retrieveUser()
+//        updateRank()
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -164,7 +165,6 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                                     
                                 }
                             }
-                            
                             self.following.append((FIRAuth.auth()?.currentUser?.uid)!)
                             print("BRIAN: You are following these users \(self.following)")
                             
@@ -204,7 +204,6 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.posts.sort(by: self.sortDatesFor)
             }
         })
-        
     }
     
     func test() {
@@ -241,13 +240,13 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                     let userToShow = Leaderboard()
                     if let username = value["username"] as? String {
                         if let breed = value["breed"] as? String {
-                            if let rank = value["rank"] as? Int {
+                            if let winCount = value["winCount"] as? Int {
                                 let imagePath = value["photoURL"] as? String
                                 
                                 userToShow.username = username
                                 userToShow.imagePath = imagePath
                                 userToShow.breed = breed
-                                userToShow.rank = rank
+                                userToShow.winCount = winCount
                                 userToShow.userID = uid
                                 self.leaders.append(userToShow)
                                 
@@ -256,6 +255,7 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                     }
                 }
             }
+            
             self.tableView.reloadData()
         })
         
@@ -266,20 +266,13 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive && searchController.searchBar.text != "" {
-            return filteredUsers.count
-        }
         return leaders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         self.leaders.sort(by: self.sortRankFor)
         let someLeader: Leaderboard
-        if searchController.isActive && searchController.searchBar.text != "" {
-            someLeader = filteredUsers[indexPath.row]
-        } else {
-            someLeader = leaders[indexPath.row]
-        }
+        someLeader = leaders[indexPath.row]
         
         let someUID = someLeader.userID
         
@@ -292,13 +285,8 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var clickedUser = ""
-        if searchController.isActive && searchController.searchBar.text != "" {
-            clickedUser = filteredUsers[indexPath.row].userID
-        } else {
-            clickedUser = leaders[indexPath.row].userID
-        }
-        self.selectedUID = clickedUser
+        var clickedUser = leaders[indexPath.row].userID
+        self.selectedUID = clickedUser!
         self.checkSelectedUID()
         print("Your selectedUID is - \(selectedUID)")
         
@@ -354,46 +342,47 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         }
     }
     
-    func updateRank() {
-        for leader in leaders {
-            let userRef = DataService.ds.REF_USERS.child(leader.userID)
-            var rank: Int
-            var bestInShowAmount = [Post]()
-            DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
-                bestInShowAmount = []
-                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                    for snap in snapshot {
-                        
-                        if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                            print("POST: \(postDict)")
-                            if let userRank = postDict["bestInShow"] as? Bool {
-                                if userRank == true {
-                                    print("WOOBLES - your best in show count is \(bestInShowAmount.count)")
-                                    
-                                    let key = snap.key
-                                    let post = Post(postKey: key, postData: postDict)
-                                    bestInShowAmount.append(post)
-                                    
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-            })
-            rank = bestInShowAmount.count
-            userRef.child("rank").setValue(rank)
-        }
-    }
+//    func updateRank() {
+//        for leader in leaders {
+//            print("LEEZUS - update rank is being run")
+//            let userRef = DataService.ds.REF_USERS.child(leader.userID)
+//            var rank: Int
+//            var bestInShowAmount = [Post]()
+//            DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
+//                bestInShowAmount = []
+//                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                    for snap in snapshot {
+//                        
+//                        if let postDict = snap.value as? Dictionary<String, AnyObject> {
+//                            print("LEEZUS - post Dict is running")
+//                            if let userRank = postDict["bestInShow"] as? Bool {
+//                                if userRank == true {
+//                                    print("LEEZUS - userRank is updating")
+//                                    let key = snap.key
+//                                    let post = Post(postKey: key, postData: postDict)
+//                                    bestInShowAmount.append(post)
+//                                    
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            })
+//            
+//            rank = bestInShowAmount.count
+//            userRef.child("rank").setValue(rank)
+//            
+//        }
+//    }
     
     func sortRankFor(this: Leaderboard, that: Leaderboard) -> Bool {
-        if that.rank == nil {
-            that.rank = 0
+        if that.winCount == nil {
+            that.winCount = 0
         }
-        if this.rank == nil {
-            this.rank = 0
+        if this.winCount == nil {
+            this.winCount = 0
         }
-        return this.rank > that.rank
+        return this.winCount > that.winCount
     }
     
     /// Search Functionality
@@ -428,14 +417,13 @@ class BestInShowVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func scheduleNotifications() {
         userRef.observe(.value, with: { (snapshot) in
-            
             let user = Users(snapshot: snapshot)
             let notifyingUser = String(user.username)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7, repeats: false)
             let content = UNMutableNotificationContent()
             content.body = "You're currently today's best in show!"
             content.sound = UNNotificationSound.default()
-            content.badge = 1
+            content.badge = 1 
             
             let request = UNNotificationRequest(identifier: "commentNotification", content: content, trigger: trigger)
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()

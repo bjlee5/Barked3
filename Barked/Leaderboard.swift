@@ -14,12 +14,12 @@ class Leaderboard: NSObject {
     var userID: String!
     var username: String!
     var breed: String!
-    var rank: Int!
+    var winCount: Int!
     var imagePath: String!
     var userRef: FIRDatabaseReference! = DataService.ds.REF_USERS
 
-    func increaseRank(by amount: Int) {
-        rank = amount
-    userRef.child(userID).child("rank").setValue(rank)
+    func increaseWins(by amount: Int) {
+        winCount = amount
+    userRef.child(userID).child("winCount").setValue(winCount)
     }
 }

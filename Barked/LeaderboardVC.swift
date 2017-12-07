@@ -116,13 +116,13 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                         let userToShow = Leaderboard()
                         if let username = value["username"] as? String {
                             if let breed = value["breed"] as? String {
-                                if let rank = value["rank"] as? Int {
+                                if let winCount = value["winCount"] as? Int {
                             let imagePath = value["photoURL"] as? String
                             
                             userToShow.username = username
                             userToShow.imagePath = imagePath
                             userToShow.breed = breed
-                            userToShow.rank = rank
+                            userToShow.winCount = winCount
                             userToShow.userID = uid
                             self.leaders.append(userToShow)
                                 
@@ -138,10 +138,10 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
     }
     
-    func updateRank() {
+    func countWins() {
         for leader in leaders {
         let userRef = DataService.ds.REF_USERS.child(leader.userID)
-        var rank: Int
+        var winCount: Int
         var bestInShowAmount = [Post]()
         DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { snapshot in
             bestInShowAmount = []
@@ -165,19 +165,19 @@ class LeaderboardVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
             }
         })
-        rank = bestInShowAmount.count
-        userRef.child("rank").setValue(rank)
+        winCount = bestInShowAmount.count
+        userRef.child("winCount").setValue(winCount)
         }
     }
     
     func sortRankFor(this: Leaderboard, that: Leaderboard) -> Bool {
-        if that.rank == nil {
-            that.rank = 0
+        if that.winCount == nil {
+            that.winCount = 0
         }
-        if this.rank == nil {
-            this.rank = 0
+        if this.winCount == nil {
+            this.winCount = 0
         }
-        return this.rank > that.rank
+        return this.winCount > that.winCount
     }
     
     /// Search Functionality
